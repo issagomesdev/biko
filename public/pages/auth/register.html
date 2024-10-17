@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/register.css">
+    <link rel="stylesheet" href="/css/all.css">
+    <title>Cadastro</title>
+    <script defer>
+       /* window.onload = async function() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                window.location.href = '/';
+            }
+        } */
+
+        async function register(event, form){
+            
+            form.setAttribute("loading", true)
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const cpf = document.getElementById('cpf').value;
+
+            const response = await fetch('https://biko-api.byissa.tech/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, email, password, cpf, "categories": [] }),
+            });
+
+            const data = await response.json();
+
+            console.log(data);
+            
+           window.location.href = '/login';
+
+        }
+    </script>
+</head>
+
+<body>
+    <div class="tela-principal">
+        <div class="tela-esquerda">
+            <img src="/midia/icon-biko-removebg-preview.png" alt="">
+            <h1>Junte-se <br>
+                a Biko!</h1>
+        </div>
+        <div class="tela-direita">
+            <div class="card-login">
+                <h1>BIKO</h1>
+                <form onsubmit="register(event, this)" loading="false">
+                <div class="textfield">
+                    <input type="text" name="name" id="name" placeholder="Digite seu nome completo" required>
+                </div>
+                <div class="textfield">
+                    <input type="email" name="email" id="email" placeholder="Digite seu e-mail" required>
+                </div>
+                <div class="textfield">
+                    <input type="password" name="password" id="password" placeholder="Digite sua Senha" required>
+                </div>
+                <div class="textfield">
+                    <input type="text" name="cpf" id="cpf" placeholder="Digite seu CPF" required>
+                </div>
+                <div class="checkbox"><input type="checkbox" name="termos" id="termos" required>Aceito os <span>Termos e Serviços</span></div>
+                <div class="reload">
+                    <div class="icon"></div>
+                </div>
+                <button type="submit" class="btn-login">Cadastrar</button>
+            </form>
+                <p><a href="./login">Já tenho uma conta</a></p>
+            </div>
+            <div class="card-shadow">.</div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,128 @@
+body {
+    background: #F5EF52;
+    background-image: url(/midia/background.jpg);
+    background-size: 88%;
+    background-repeat: no-repeat;
+}
+
+
+.tela-esquerda > h1 {
+    line-height: 3rem;
+    color: white;
+}
+
+.tela-principal {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction:row;
+}
+
+.tela-esquerda img{
+    max-width:300px;
+    max-height:300px;
+    display: flex;
+    width: auto;
+    margin-right: 1rem;
+    height: auto;
+}
+
+.tela-esquerda {
+    display: flex;
+    align-items: center;
+    margin-right: 5rem;
+}
+
+.tela-direita{
+    width: 30vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-login{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 30px 35px;
+    background: white;
+    border-radius: 20px;
+}
+
+.card-shadow {
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    flex-direction: column;
+    padding: 30px 35px;
+    border: none;
+    z-index: -8;
+    position: absolute;
+    background-color: #46434360;
+    width: 23rem;
+    margin-top: 1.3rem;
+    margin-left: 1.4rem;
+    height: 24.7rem;
+}
+
+.card-login > h1{
+    color: #fff700;
+    font-weight: 800;
+    margin: 0;
+}
+
+.card-login > button{
+    margin-top: 8%;
+}
+
+.textfield{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 6%;
+}
+
+.textfield > input{
+    width: 23rem;
+    height: 3.6rem;
+    border-radius: 13px;
+    padding: 15px;
+    font-size: 12pt;
+    box-shadow: 0px 5px 20px #adadad;
+    outline: none;
+    font-weight: 700;
+    font-size: 1.2rem;
+    box-sizing: border-box;
+    border: 1.4px solid black;
+    margin-top: 8px;
+}
+
+ .tela-principal button {
+    border: none;
+    width: 100%;
+    border-radius: 10px;
+    background-color: #ffef42;
+    height: 4rem;
+    font-weight: 700;
+    font-size: 2.1rem;
+    cursor: pointer;
+    margin-top: 1em;
+}
+
+.tela-principal p {
+    margin-top: 2rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.tela-principal p a {
+    text-decoration: none;
+    color: #4b4848;
+}
+
