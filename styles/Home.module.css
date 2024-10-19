@@ -1,0 +1,114 @@
+
+
+
+.content {
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  width: 92%;
+  height: 90%;
+  position: relative;
+}
+
+.containerShadow {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 92%;
+  height: 95%;
+  position: fixed;
+  border-radius: 20px;
+  border: none;
+  background-color: #46434360;
+  z-index: 9;
+}
+
+.containerMain {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  height: 95%;
+  position: fixed;
+  border-radius: 20px;
+  background-color: white;
+  z-index: 99;
+}
+
+.center {
+  margin-left: 5.4rem;
+  list-style: none;
+  box-sizing: border-box;
+  padding: auto;
+}
+
+.center ul {
+  margin-left: 5.4rem;
+  list-style: none;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+  padding: auto;
+}
+
+.center a {
+  color: black;
+}
+
+.center li {
+  cursor: pointer;
+  color: black;
+  padding: 1rem;
+  margin-right: 7.1rem;
+}
+
+.center h2 {
+  padding-bottom: 0rem;
+  padding-left: 0rem;
+  cursor: pointer;
+}
+
+.center hr {
+  color: #46434360;
+  margin: 0 20px 0 7px;
+}
+
+.center i {
+  font-size: 1.8rem;
+}
+
+.center .perfil i {
+  font-size: 4rem;
+  color: black;
+}
+
+.sidebar .center {
+  margin-left: -7rem;
+  position: fixed;
+  width: 200px;
+  height: 100%;
+  padding: 30px 0;
+  border-right: 2px solid;
+  padding-top: 0px;
+  padding-bottom: 5rem;
+  color: #46434360;
+}
+
+/* ########## navegação ########## */
+
+.escrever_post {
+  display: flex;
+  flex-direction: column;
+  margin-left: 5rem;
+}
+
+.escrever_post textarea {
+  font-weight: 200px;
+  border-radius: 20px;
+  border: 2px solid black;
+  resize: none;
+  padding: 20px 0 0 20px;
+  margin: 15px 50px 15px 50px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
