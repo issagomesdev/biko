@@ -1,4 +1,4 @@
-import Cookie from 'js-cookie';
+import Link from 'next/link';
 import { GetServerSideProps } from 'next';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
@@ -112,7 +112,7 @@ export default function RegisterPage() {
                     </div>
                     <button type="submit" className={styles.btnLogin}>Login</button>
                 </form>
-                <p><a href="./login">Já tenho uma conta</a></p>
+                <p><Link href="./login">Já tenho uma conta</Link></p>
             </div>
             <div className={styles.cardShadow}>.</div>
         </div>
