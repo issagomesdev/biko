@@ -1,7 +1,4 @@
-
-
-
-.content {
+.container {
   top: 0px;
   left: 0px;
   right: 0px;
@@ -10,11 +7,11 @@
   position: relative;
 }
 
-.containerShadow {
+.boxShadow {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 92%;
+  width: 96%;
   height: 95%;
   position: fixed;
   border-radius: 20px;
@@ -23,16 +20,36 @@
   z-index: 9;
 }
 
-.containerMain {
+.boxContent {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90%;
+  width: 95%;
   height: 95%;
   position: fixed;
   border-radius: 20px;
   background-color: white;
   z-index: 99;
+}
+
+.boxContent .content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+.sidebar {
+  width: 90px;
+  height: 95%;
+}
+
+.sidebar .center {
+  margin-left: -7rem;
+  position: relative;
+  width: 200px;
+  height: 100%;
+  border-right: 2px solid;
+  color: #46434360;
 }
 
 .center {
@@ -82,33 +99,13 @@
   color: black;
 }
 
-.sidebar .center {
-  margin-left: -7rem;
-  position: fixed;
-  width: 200px;
-  height: 100%;
-  padding: 30px 0;
-  border-right: 2px solid;
-  padding-top: 0px;
-  padding-bottom: 5rem;
-  color: #46434360;
+.content {
+
 }
 
-/* ########## navegação ########## */
-
-.escrever_post {
-  display: flex;
-  flex-direction: column;
-  margin-left: 5rem;
-}
-
-.escrever_post textarea {
-  font-weight: 200px;
-  border-radius: 20px;
-  border: 2px solid black;
-  resize: none;
-  padding: 20px 0 0 20px;
-  margin: 15px 50px 15px 50px;
-  font-size: 1.2rem;
-  cursor: pointer;
+.content .screen {
+  width: 100%;
+  height: 93%;
+  margin: 1.5em;
+  overflow: auto;
 }

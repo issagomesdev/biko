@@ -36,9 +36,7 @@ export default function LoginPage() {
         });
         Cookie.set('token', data.data.token);
         Cookie.set('user', JSON.stringify(data.data.data));
-        setTimeout(() => {
-          router.push('/');
-        }, 500);
+        router.push('/');
       } else {
         toast.update(toast_id, {
           render: data.message,
@@ -59,10 +57,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={styles.content}>
+    <div className={styles.container}>
       <div className={styles.mainScreen}>
         <div className={styles.leftScreen}>
-            <img src="/midia/icon-biko-removebg-preview.png" alt=""/>
+            <img src="/midia/icon.png" alt=""/>
             <h1>Junte-se <br/>
                 a Biko!</h1>
         </div>

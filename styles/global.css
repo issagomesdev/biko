@@ -1,5 +1,19 @@
 * {
     font-family: sans-serif !important;
+    
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: #000;
+      border-radius: 10px;
+      border: none;
+    }
 }
 
 body {

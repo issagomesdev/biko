@@ -37,9 +37,7 @@ export default function RegisterPage() {
           progress: undefined,
           theme: "dark",
         });
-        setTimeout(() => {
-          router.push('/login');
-        }, 500);
+        router.push('/login');
       } else {
 
         const erros: string[] = data.data; 
@@ -83,10 +81,10 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className={styles.content}>
+    <div className={styles.container}>
       <div className={styles.mainScreen}>
         <div className={styles.leftScreen}>
-            <img src="/midia/icon-biko-removebg-preview.png" alt=""/>
+            <img src="/midia/icon.png" alt=""/>
             <h1>Junte-se <br/>
                 a Biko!</h1>
         </div>

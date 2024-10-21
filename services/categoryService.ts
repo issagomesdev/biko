@@ -1,5 +1,5 @@
 import { baseData } from '../utils/api';
-import { Category } from '../models/Categories';
+import { Category } from '../models/Category';
 
 export class CategoryService {
 

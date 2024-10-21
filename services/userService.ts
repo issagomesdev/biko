@@ -1,5 +1,5 @@
 import { baseData } from '../utils/api';
-import { User } from '../models/Users';
+import { User } from '../models/User';
 
 export class UserService {
 
