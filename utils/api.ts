@@ -7,6 +7,7 @@ export const baseData = async (endpoint: string, options: RequestInit = {}) => {
     throw {
       status: response.status,
       message: response.statusText,
+      data: response.json()
     };
   }
   

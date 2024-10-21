@@ -33,7 +33,7 @@ export default function Sidebar() {
           Cookie.remove('user');
         } 
       } catch (error) {
-        console.error('Erro ao realizar o login:', error);
+        console.error('Erro ao realizar o logout:', error);
       }
   
       router.push('/');

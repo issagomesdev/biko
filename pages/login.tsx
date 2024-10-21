@@ -20,7 +20,6 @@ export default function LoginPage() {
     });
     try {
       const data = await authService.login(email, password);
-
       if (data.success) {
         toast.update(toast_id, {
           render: data.message,
@@ -37,22 +36,23 @@ export default function LoginPage() {
         Cookie.set('token', data.data.token);
         Cookie.set('user', JSON.stringify(data.data.data));
         router.push('/');
-      } else {
-        toast.update(toast_id, {
-          render: data.message,
-          type: "error",
-          isLoading: false,
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
       }
     } catch (error:any) {
-      console.error('Erro ao realizar o login:', error);
+      const data = await error.data;
+      console.error('Erro ao realizar o login:', data);
+
+      toast.update(toast_id, {
+        render: data.message,
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
 

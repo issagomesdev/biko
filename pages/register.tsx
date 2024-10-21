@@ -38,37 +38,36 @@ export default function RegisterPage() {
           theme: "dark",
         });
         router.push('/login');
-      } else {
-
-        const erros: string[] = data.data; 
-
-        toast.update(toast_id, {
-          render: data.message,
-          type: "error",
-          isLoading: false,
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-
-        erros.forEach((error) => {
-            toast.error(error, {
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-              });
-        });
       }
     } catch (error:any) {
-      console.error('Erro ao realizar o cadastro:', error);
+      const data = await error.data;
+      console.error('Erro ao realizar o cadastro:', data);
+      
+      toast.update(toast_id, {
+        render: data.message,
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+
+      const erros: string[] = data.data; 
+      erros.forEach((error) => {
+          toast.error(error, {
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
+      });
     }
   };
 
