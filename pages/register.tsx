@@ -168,7 +168,7 @@ export default function RegisterPage() {
                               ))}
                             </select>
                           </div> 
-                        </div>
+                        </div> 
                             
                         <div className={styles.textfield}>
                           <input type="text" id="neighborhood" name="neighborhood" placeholder="Bairro" value=    {formData.neighborhood} onChange={handleChange} required/>
