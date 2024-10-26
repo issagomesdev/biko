@@ -10,7 +10,7 @@
   
   .writePost .textarea {
     border-radius: 20px;
-    border: 2px solid black;
+    border: 2px solid var(--secondary-bg-color);
     padding: 20px 0 0 20px;
     cursor: pointer;
   }
@@ -24,7 +24,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    background-color: #000;
+    background-color: var(--secondary-bg-color);
     padding: .3em .7em;
     border-radius: 20px;
   }
@@ -33,11 +33,11 @@
     margin: 0;
     margin-left: .8em;
     font-size: .6em;
-    color: #fff;
+    color: var(--primary-color);
   }
 
   .shortcuts .item i {
-    color: #fff;
+    color: var(--primary-color);
     font-size: .9em;
   }
   
@@ -54,14 +54,14 @@
     padding: .5em 1em;
     border-radius: 4px;
     margin-top: 1em;
-    color: #fff;
+    color: var(--primary-color);
     font-weight: 600;
-    background-color: #F5EF52;
+    background-color: var(--main-bg-color);
     cursor: pointer;
   }
   
   .publish button:last-child {
-    background-color: #000;
+    background-color: var(--secondary-bg-color);
     margin-left: .5em;
   }
   
@@ -97,7 +97,7 @@
 }
 
 .publication {
-    border: 2px solid #000;
+    border: 2px solid var(--secondary-bg-color);
     margin-bottom: 1em;
     border-radius: 20px;
 }
@@ -120,7 +120,7 @@
 .publicationContainer .header .author i {
     margin-right: .3em;
     font-size: 3em;
-    color: #fff;
+    color: var(--primary-color);
     position: relative;
 }
 
@@ -142,7 +142,7 @@
 
 .publicationContainer .header .period p {
     margin: 0;
-    color: #a4a4a4;
+    color: #00000067;
 }
 
 .publicationContainer .publicationContent {

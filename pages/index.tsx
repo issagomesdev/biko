@@ -1,7 +1,7 @@
 
 import { GetServerSideProps } from 'next';
 import { isAuthenticated } from '../utils/auth';
-import styles from '../styles/Home.module.css';
+import styles from '../styles/home.module.css';
 import { CategoryService } from '../services/categoryService';
 import { Category } from '../models/Category';
 import FeedPage from '../components/Feed';

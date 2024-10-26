@@ -28,7 +28,7 @@
   height: 95%;
   position: fixed;
   border-radius: 20px;
-  background-color: white;
+  background-color: var(--primary-color);
   z-index: 99;
 }
 
@@ -69,12 +69,12 @@
 }
 
 .center a {
-  color: black;
+  color: var(--secondary-bg-color);
 }
 
 .center li {
   cursor: pointer;
-  color: black;
+  color: var(--secondary-bg-color);
   padding: 1rem;
   margin-right: 7.1rem;
 }
@@ -96,7 +96,7 @@
 
 .center .perfil i {
   font-size: 4rem;
-  color: black;
+  color: var(--secondary-bg-color);
 }
 
 .content {

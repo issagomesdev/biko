@@ -1,11 +1,16 @@
 import Link from 'next/link';
 import { GetServerSideProps } from 'next';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { authService } from '../services/authService';
+import { IBGEService } from '../services/ibgeService';
+import { CategoryService } from '../services/categoryService';
 import { isAuthenticated } from '../utils/auth';
 import { toast } from 'react-toastify';
-import styles from '../styles/Register.module.css';
+import styles from '../styles/form.module.css';
+import { State } from '../models/State';
+import { City } from '../models/City';
+import { Category } from '../models/Category';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -13,9 +18,33 @@ export default function RegisterPage() {
     email: '',
     password: '',
     cpf: '',
+    state: '',
+    city: '',
+    neighborhood: '',
     categories: []
   });
+  const [states, setStates] = useState<State[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [openCategories, setOpenCategories] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+
+    const loadStates = async() => {
+      const data = await IBGEService.getStates();
+      setStates(data);
+    }
+
+    const loadCategories = async() => {
+      const data = await CategoryService.getCategories();
+      setCategories(data);
+    }
+
+    loadStates();
+    loadCategories();
+
+  }, [])
 
   const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -79,6 +108,18 @@ export default function RegisterPage() {
     }));
   };
 
+  const handleStateChange = async(e:any) => {
+
+    setFormData((prevState) => ({
+      ...prevState,
+      state: e.target.value,
+      city: ''
+    }));
+
+    const data = await IBGEService.getCities(e.target.value);
+    setCities(data);
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.mainScreen}>
@@ -87,27 +128,78 @@ export default function RegisterPage() {
             <h1>Junte-se <br/>
                 a Biko!</h1>
         </div>
-        <div className={styles.rightScreen}>
+        <div className={`${styles.rightScreen} ${styles.full}`}>
             <div className={styles.cardLogin}>
                 <h1>BIKO</h1>
                 <form onSubmit={handleRegister} className={styles.form}>
-                    <div className={styles.textfield}>
-                        <input type="text" id="name" name="name" placeholder="Digite seu nome completo" value={formData.name} onChange={handleChange} required/>
+                    <div className={styles.fieldsGroup}>
+                      <div className={styles.fields}>
+                        <div className={styles.textfield}>
+                            <input type="text" id="name" name="name" placeholder="Nome completo" value={formData. name} onChange={handleChange} required/>
+                        </div>
+      
+                        <div className={styles.textfield}>
+                            <input type="email" id="email" name="email" placeholder="Email" value={formData.email}  onChange={handleChange} required/>
+                        </div>
+      
+                        <div className={styles.textfield}>
+                            <input type="password" id="password" name="password" placeholder="Senha" value= {formData.password} onChange={handleChange} required/>
+                        </div>
+                      </div>
+                      <div className={styles.fields}>
+                        <div className={styles.textfield}>
+                            <input type="text" id="cpf" name="cpf" placeholder="CPF" value={formData.cpf}   onChange= {handleChange} required/>
+                        </div>
+                        <div className={styles.textfieldPair}>
+                          <div className={styles.textfield}>
+                            <select name="state" id="state" value={formData.state} onChange={handleStateChange}>
+                              <option selected value=''>Selecione estado </option>
+                              {states.map((state) => (
+                                  <option key={state.id} value={state.id}> {state.nome} </option>
+                              ))}
+                            </select>
+                          </div>
+                            
+                          <div className={styles.textfield}>
+                            <select name="city" id="city" value={formData.city} onChange={handleChange}>
+                              <option selected value=''>Selecione cidade </option>
+                              {cities.map((city) => (
+                                  <option key={city.id} value={city.id}> {city.nome} </option>
+                              ))}
+                            </select>
+                          </div> 
+                        </div>
+                            
+                        <div className={styles.textfield}>
+                          <input type="text" id="neighborhood" name="neighborhood" placeholder="Bairro" value=    {formData.neighborhood} onChange={handleChange} required/>
+                        </div>
+                      </div>
                     </div>
-                    <div className={styles.textfield}>
-                        <input type="email" id="email" name="email" placeholder="Digite seu Email" value={formData.email} onChange={handleChange} required/>
+
+                    <div className={styles.categoriesContainer}>
+                      <div className={styles.openCategories} onClick={() => setOpenCategories(openCategories? false : true)}>
+                        <div className={styles.text}>
+                          <h3>Quero ser um prestador de serviços</h3>
+                          <p>{openCategories? 'Selecione os serviços que deseja anunciar' : 'Clique aqui para selecionar os serviços que deseja anunciar'}</p>
+                        </div>
+                        <i className={openCategories? "bi bi-caret-up-fill" : "bi bi-caret-down-fill"}></i>
+                      </div>
+                      {openCategories? <div className={styles.categoriesContent}>
+                        <div className={styles.categories}>
+                          {categories.map((category) => (
+                              <div className={styles.category}>
+                                <p>{category.name}</p>
+                              </div>
+                            ))}
+                        </div>
+                      </div> : ''}
                     </div>
-                    <div className={styles.textfield}>
-                        <input type="password" id="password" name="password" placeholder="Digite sua senha" value={formData.password} onChange={handleChange} required/>
-                    </div>
-                    <div className={styles.textfield}>
-                        <input type="text" id="cpf" name="cpf" placeholder="Digite seu CPF" value={formData.cpf} onChange={handleChange} required/>
-                    </div>
+
                     <div className={styles.checkbox}>
                         <input type="checkbox" name="termos" id="termos" required/>
                         Aceito os <span>Termos e Serviços</span>
                     </div>
-                    <button type="submit" className={styles.btnLogin}>Login</button>
+                    <button type="submit" className={styles.btnLogin}>Cadastrar</button>
                 </form>
                 <p><Link href="./login">Já tenho uma conta</Link></p>
             </div>

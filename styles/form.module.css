@@ -9,7 +9,7 @@
 
 .leftScreen > h1 {
     line-height: 3rem;
-    color: white;
+    color: var(--primary-color);
 }
 
 .mainScreen {
@@ -37,11 +37,16 @@
 }
 
 .rightScreen{
-    width: 30vw;
-    height: 100vh;
+    width: 30%;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+}
+
+.rightScreen.full{
+    width: 55%;
 }
 
 .cardLogin{
@@ -51,28 +56,26 @@
     align-items: center;
     flex-direction: column;
     padding: 30px 35px;
-    background: white;
+    background: var(--primary-color);
     border-radius: 20px;
+    z-index: 9;
 }
 
 .cardShadow {
-    justify-content: center;
-    align-items: center;
+    width: 100%;
     border-radius: 20px;
-    flex-direction: column;
-    padding: 30px 35px;
-    border: none;
-    z-index: -8;
     position: absolute;
     background-color: #46434360;
-    width: 23rem;
-    margin-top: 1.3rem;
-    margin-left: 1.4rem;
     height: 24.7rem;
+    bottom: 7.5em;
+}
+
+.full .cardShadow {
+    bottom: 1.5em;
 }
 
 .cardLogin > h1{
-    color: #fff700;
+    color: var(--main-bg-color);
     font-weight: 800;
     margin: 0;
 }
@@ -86,11 +89,11 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    padding-top: 6%;
+    padding-top: 1em;
 }
 
-.textfield > input{
-    width: 23rem;
+.textfield > input, .textfield > select{
+    width: 100%;
     height: 3.6rem;
     border-radius: 13px;
     padding: 15px;
@@ -98,10 +101,27 @@
     box-shadow: 0px 5px 20px #adadad;
     outline: none;
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 1rem;
     box-sizing: border-box;
-    border: 1.4px solid black;
+    border: 1.4px solid var(--secondary-bg-color);
     margin-top: 8px;
+}
+
+.textfieldPair {
+    display: flex;
+    justify-content: space-between;
+}
+
+.textfieldPair .textfield {
+    width: 49% !important;
+}
+
+.fields .textfield input, .fields .textfield select {
+    height: 3.2em;
+}
+
+.textfieldPair select {
+    font-size: .9rem;
 }
 
  .mainScreen button {
@@ -116,13 +136,13 @@
     margin-top: 1em;
 }
 
-.mainScreen p {
+.mainScreen >p, .cardLogin >p {
     margin-top: 2rem;
     font-size: 1.4rem;
     font-weight: 700;
 }
 
-.mainScreen p a {
+.mainScreen >p a, .cardLogin >p a {
     text-decoration: none;
     color: #4b4848;
 }
@@ -132,24 +152,7 @@
     align-content: center;
     flex-direction: column;
     margin-top: 1rem;
-}
-
-.form select {
-    margin-top: 1rem;
-    width: 23rem;
-    height: 3.6rem;
-    border-radius: 13px;
-    padding: 15px;
-    font-size: 12pt;
-    box-shadow: 0px 5px 20px #adadad;
-    outline: none;
-    font-weight: 700;
-    font-size: 1.2rem;
-    box-sizing: border-box;
-    border: 1.4px solid black;
-    margin: auto;
-    cursor: pointer;
-    color: rgb(116, 116, 116);
+    width: 100%;
 }
 
 .form label{
@@ -157,6 +160,15 @@
     color:#4b4848;
     font-size: 1.4rem;
     font-weight: 600;
+}
+
+.fieldsGroup {
+    display: flex;
+    justify-content: space-between;
+}
+
+.fields {
+    width: 49%;
 }
 
 .checkbox {
@@ -168,4 +180,52 @@
 
 .checkbox span{
     color: #ffef42;
+}
+
+.categoriesContainer {
+    background-color: var(--primary-color);
+    border-radius: 13px;
+    margin-top: 1em;
+    padding: 1em;
+    box-shadow: 0px 5px 20px #adadad;
+    border: 1.4px solid var(--secondary-bg-color);
+}
+
+.categoriesContainer .text >p {
+    margin: .5em 0 0 0;
+    font-size: .7em;
+}
+
+
+.openCategories {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.openCategories h3 {
+    margin: 0;
+    width: 100%
+}
+
+.categoriesContent {
+    margin-top: 1em;
+    background-color:var(--main-bg-color);
+    border-radius: 13px;
+    padding: 1em;
+}
+
+.categories {
+    height: 10em;
+    overflow-y: auto;
+}
+
+.category {
+    cursor: pointer;
+}
+
+.category p {
+    margin: 0;
+    font-weight: 700;
 }

@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { authService } from '../services/authService';
 import { isAuthenticated } from '../utils/auth';
 import { toast } from 'react-toastify';
-import styles from '../styles/Login.module.css';
+import styles from '../styles/form.module.css';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -67,7 +67,7 @@ export default function LoginPage() {
         <div className={styles.rightScreen}>
             <div className={styles.cardLogin}>
                 <h1>BIKO</h1>
-                <form onSubmit={handleLogin}>
+                <form onSubmit={handleLogin} className={styles.form}>
                     <div className={styles.textfield}>
                         <input type="email" id="email" placeholder="Digite seu Email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
                     </div>

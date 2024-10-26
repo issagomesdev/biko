@@ -1,7 +1,7 @@
 import Cookie from 'js-cookie';
 import { useRouter } from 'next/router';
 import React from 'react';
-import styles from '../styles/Home.module.css';
+import styles from '../styles/home.module.css';
 import { toast } from 'react-toastify';
 import { authService } from '../services/authService';
 

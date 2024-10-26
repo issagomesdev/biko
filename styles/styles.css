@@ -1,3 +1,9 @@
+:root {
+  --main-bg-color: #F5EF52;
+  --secondary-bg-color: #000;
+  --primary-color: #fff;
+}
+
 * {
     font-family: sans-serif !important;
     
@@ -10,13 +16,13 @@
     }
 
     ::-webkit-scrollbar-thumb {
-      background-color: #000;
+      background-color: var(--secondary-bg-color);
       border-radius: 10px;
       border: none;
     }
 }
 
 body {
-    background: #F5EF52;
+    background: var(--main-bg-color);
     margin: 0;
 }

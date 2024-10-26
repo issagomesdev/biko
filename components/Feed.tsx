@@ -1,6 +1,6 @@
 import Cookie from 'js-cookie';
 import React from 'react';
-import styles from '../styles/Feed.module.css';
+import styles from '../styles/feed.module.css';
 import { useState, useEffect } from 'react';
 import { Publication } from '../models/Publication';
 import { PublicationService } from '../services/publicationService';
@@ -21,6 +21,7 @@ export default function FeedPage() {
     const token:any = Cookie.get('token');
 
     useEffect(() => {
+
         const getPublications = async () => {
           try {
             const data:any = await PublicationService.getPublications(token);
@@ -28,20 +29,20 @@ export default function FeedPage() {
             setLoading(false);
           } catch (error:any) {
             if(error.status == 401){ 
-                toast.info("Desconectado", {
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "dark",
-                });
-                Cookie.remove('token');
-                Cookie.remove('user');
-                router.push('/');
+              console.error('Erro:', error);
+              toast.info("Desconectado", {
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+              });
+              Cookie.remove('token');
+              Cookie.remove('user');
+              router.push('/');
             }
-            console.error('Erro:', error);
           }
         };
     
@@ -57,46 +58,44 @@ export default function FeedPage() {
       };
       
       const publish = async () => {
+        
         const toast_id = toast.loading('Publicando, aguarde...', {
             position: "top-right",
         });
 
         try {
-
             const data:any = await PublicationService.createPublication(newPublication, token);
-
             if (data.success) {
-                toast.update(toast_id, {
-                  render: "Anúncio publicado com sucesso!",
-                  type: "success",
-                  isLoading: false,
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "dark",
-                });
-                setWritePost(false);
-                setNewPublication({
-                  title: '',
-                  text: ''
-                });
-
+              toast.update(toast_id, {
+                render: "Anúncio publicado com sucesso!",
+                type: "success",
+                isLoading: false,
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+              });
+              setWritePost(false);
+              setNewPublication({
+                title: '',
+                text: ''
+              });
             } else {
-                toast.update(toast_id, {
-                  render: data.message,
-                  type: "error",
-                  isLoading: false,
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "dark",
-                });
+              toast.update(toast_id, {
+                render: data.message,
+                type: "error",
+                isLoading: false,
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+              });
             }
 
             setLoading(true);
@@ -192,7 +191,7 @@ export default function FeedPage() {
                         visible={true}
                         height="150"
                         width="150"
-                        color="#000"
+                        color="var(--secondary-bg-color)"
                         ariaLabel="tail-spin-loading"
                         radius="1"
                         wrapperStyle={{}}
