@@ -34,7 +34,6 @@ export default function LoginPage() {
           theme: "dark",
         });
         Cookie.set('token', data.data.token);
-        Cookie.set('user', JSON.stringify(data.data.data));
         router.push('/');
       }
     } catch (error:any) {

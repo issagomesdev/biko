@@ -13,8 +13,8 @@ export default function Sidebar() {
         position: "top-right",
       });
       try {
-        const token:any = Cookie.get('token');
-        const data = await authService.logout(token);
+        const token:string|undefined = Cookie.get('token');
+        const data = await authService.logout(token ?? '');
         
         if (data.success) {
           toast.update(toast_id, {
@@ -30,7 +30,6 @@ export default function Sidebar() {
             theme: "dark",
           });
           Cookie.remove('token');
-          Cookie.remove('user');
         } 
       } catch (error) {
         console.error('Erro ao realizar o logout:', error);

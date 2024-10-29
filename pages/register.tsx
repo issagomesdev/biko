@@ -11,9 +11,10 @@ import styles from '../styles/form.module.css';
 import { State } from '../models/State';
 import { City } from '../models/City';
 import { Category } from '../models/Category';
+import { registerUser } from '../models/User';
 
 export default function RegisterPage() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<registerUser>({
     name: '',
     email: '',
     password: '',
@@ -71,7 +72,6 @@ export default function RegisterPage() {
     } catch (error:any) {
       const data = await error.data;
       console.error('Erro ao realizar o cadastro:', data);
-      
       toast.update(toast_id, {
         render: data.message,
         type: "error",
@@ -109,15 +109,23 @@ export default function RegisterPage() {
   };
 
   const handleStateChange = async(e:any) => {
-
     setFormData((prevState) => ({
       ...prevState,
       state: e.target.value,
       city: ''
     }));
-
     const data = await IBGEService.getCities(e.target.value);
     setCities(data);
+  }
+
+  const handleChangeCategories = async(categoryID:number) => {
+    const exist = formData.categories.includes(categoryID);
+    setFormData((prevState) => ({
+      ...prevState,
+      categories: exist
+        ? prevState.categories.filter((id) => id !== categoryID)
+        : [...prevState.categories, categoryID]
+    }));
   }
 
   return (
@@ -148,8 +156,9 @@ export default function RegisterPage() {
                       </div>
                       <div className={styles.fields}>
                         <div className={styles.textfield}>
-                            <input type="text" id="cpf" name="cpf" placeholder="CPF" value={formData.cpf}   onChange= {handleChange} required/>
+                            <input type="text" id="cpf" name="cpf" placeholder="CPF" value={formData.cpf} onChange= {handleChange} required/>
                         </div>
+                        
                         <div className={styles.textfieldPair}>
                           <div className={styles.textfield}>
                             <select name="state" id="state" value={formData.state} onChange={handleStateChange}>
@@ -158,9 +167,9 @@ export default function RegisterPage() {
                                   <option key={state.id} value={state.id}> {state.nome} </option>
                               ))}
                             </select>
-                          </div>
+                        </div>
                             
-                          <div className={styles.textfield}>
+                        <div className={styles.textfield}>
                             <select name="city" id="city" value={formData.city} onChange={handleChange}>
                               <option selected value=''>Selecione cidade </option>
                               {cities.map((city) => (
@@ -180,14 +189,21 @@ export default function RegisterPage() {
                       <div className={styles.openCategories} onClick={() => setOpenCategories(openCategories? false : true)}>
                         <div className={styles.text}>
                           <h3>Quero ser um prestador de serviços</h3>
-                          <p>{openCategories? 'Selecione os serviços que deseja anunciar' : 'Clique aqui para selecionar os serviços que deseja anunciar'}</p>
+                          <p>{openCategories? 'Selecione os serviços que deseja anunciar e para minimizar esta área, clique aqui novamente' : 'Clique aqui para selecionar os serviços que deseja anunciar'}</p>
                         </div>
+                        <span>{formData.categories.length}</span>
                         <i className={openCategories? "bi bi-caret-up-fill" : "bi bi-caret-down-fill"}></i>
                       </div>
                       {openCategories? <div className={styles.categoriesContent}>
+                        <p onClick={() => setFormData((prevState) => ({...prevState, categories: []}))}>Limpar seleção</p>
                         <div className={styles.categories}>
                           {categories.map((category) => (
-                              <div className={styles.category}>
+                              <div key={category.id} className={styles.category} onClick={() => handleChangeCategories(category.id)}>
+                                <div className={styles.checkbox}>
+                                  <div className={styles.box}>
+                                     <i className={formData.categories.includes(category.id)? "bi bi-check" : ""}></i>
+                                  </div>
+                                </div>
                                 <p>{category.name}</p>
                               </div>
                             ))}
@@ -195,7 +211,7 @@ export default function RegisterPage() {
                       </div> : ''}
                     </div>
 
-                    <div className={styles.checkbox}>
+                    <div className={styles.terms}>
                         <input type="checkbox" name="termos" id="termos" required/>
                         Aceito os <span>Termos e Serviços</span>
                     </div>
