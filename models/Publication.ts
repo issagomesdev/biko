@@ -11,7 +11,9 @@ export interface Publication {
     author:User,
     categories:Category[],
     comments:Comment[],
+    comments_count:number,
     likes:Like[],
+    likes_count:number,
     created_at:string,
     updated_at:string
 }

@@ -48,17 +48,6 @@ export default function FeedPage() {
   const [states, setStates] = useState<State[]>([]);
   const [cities, setCities] = useState<City[]>([]);
 
-  const MultilineText: React.FC<MultilineTextProps> = ({text}) => (
-    <p>
-      {text.split('\n').map((line, index) => (
-        <React.Fragment key={index}>
-          {line}
-          <br />
-        </React.Fragment>
-      ))}
-    </p>
-  );
-
   useEffect(() => {
       const getUser = async () => {
         try {
@@ -216,6 +205,17 @@ const handleStateChange = async(e:any) => {
       }
   }
 
+  const MultilineText: React.FC<MultilineTextProps> = ({text}) => (
+    <p>
+      {text.split('\n').map((line, index) => (
+        <React.Fragment key={index}>
+          {line}
+          <br />
+        </React.Fragment>
+      ))}
+    </p>
+  );
+
   const checkRequerimentsPublish = () => {
     if(newPublication.title.trim().length < 1){
       toast.error('Dê um título a postagem', {
@@ -277,6 +277,28 @@ const handleStateChange = async(e:any) => {
     setOpenCategoriesFilter(false)
     setLoading(true);
   }
+
+  const updateLike = (pubID: number) => {
+    setDataPublications(prevData =>
+      prevData.map(pub =>
+        pub.id === pubID
+          ? {
+              ...pub,
+              likes: [
+                ...pub.likes,
+                {
+                  id: 435,
+                  user_id: 5,
+                  publication_id: 68,
+                  created_at: "2024-09-22T21:28:17.000000Z",
+                  updated_at: "2024-09-22T21:28:17.000000Z"
+                }
+              ]
+            }
+          : pub
+      )
+    );
+  };
   
   const renderPublications = () => {
     return (
@@ -326,7 +348,7 @@ const handleStateChange = async(e:any) => {
                           <p>{publication.comments.length} comentários</p>
                       </div>
                       <div className={styles.item}>
-                          <i className={`bi bi-hand-thumbs-up`}></i>
+                          <i className={`bi bi-hand-thumbs-up`} onClick={() => updateLike(publication.id)}></i>
                           <p>{publication.likes.length} curtidas</p>
                       </div>
                   </div>
