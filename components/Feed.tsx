@@ -1,6 +1,7 @@
 import Cookie from 'js-cookie';
 import React from 'react';
 import feed from '../styles/feed.module.css';
+import publi from '../styles/ultils/publications.module.css';
 import ultils from '../styles/ultils/categorySelector.module.css';
 import { useState, useEffect } from 'react';
 import { Publication, newPublication, filterPublication } from '../models/Publication';
@@ -263,7 +264,7 @@ export default function FeedPage() {
   }
 
   const openPublication = async(id:number) => {
-    router.push(`/publications/${id}`);
+    router.push(`/posts/${id}`);
   }
 
   const checkRequerimentsPublish = () => {
@@ -369,7 +370,7 @@ export default function FeedPage() {
 
   const renderPublications = () => {
     return (
-        <div className={feed.publications}>
+        <div className={publi.publications}>
           {dataPublications.map(publication => {
             const formatDate = (value:string) => {
               const publicationDate = new Date(value);
@@ -388,15 +389,15 @@ export default function FeedPage() {
             };
     
             return (
-              <div key={publication.id} className={feed.publication}>
-                <div className={feed.publicationContainer}>
-                  <div className={feed.header}>
-                      <div className={feed.author}>
+              <div key={publication.id} className={publi.publication}>
+                <div className={publi.publicationContainer}>
+                  <div className={publi.header}>
+                      <div className={publi.author}>
                           <i className={`bi bi-person-circle`}></i>
                           <h3>{publication.author.name}</h3>
                           <span>{publication.type === 0? 'cliente' : 'prestador de serviços'}</span>
                       </div>
-                      <div className={feed.corner}>
+                      <div className={publi.corner}>
                           <p>{formatDate(publication.created_at)}</p>
                           <Options 
                             trigger={<i className={"bi bi-three-dots-vertical"}></i>}
@@ -408,7 +409,7 @@ export default function FeedPage() {
                             ]}/>
                       </div>
                   </div>
-                  <div className={feed.publicationContent}>
+                  <div className={publi.publicationContent}>
                       <h2>{publication.title}</h2>
                       <p> {publication.text.split('\n').map((line, index) => (
                             <React.Fragment key={index}>
@@ -418,24 +419,24 @@ export default function FeedPage() {
                           ))}
                       </p>
                   </div>
-                  <div className={feed.tags}>
+                  <div className={publi.tags}>
                     {publication.categories.map((category) => (
                       <p key={category.id}>{category.name}</p>
                     ))}
                   </div>
-                  <div className={feed.footer}>
-                      <div className={feed.items}>
-                        <div className={feed.item}>
+                  <div className={publi.footer}>
+                      <div className={publi.items}>
+                        <div className={publi.item}>
                             <i className={`bi bi-chat-left`}></i>
                             <p>{publication.comments.length} comentários</p>
                         </div>
-                        <div className={feed.item}>
+                        <div className={publi.item}>
                             <i className={`bi bi-hand-thumbs-up${user && publication.likes.find(like => like.user_id == user.id) ? '-fill' : ''}`} onClick={() => updateLike(publication.id)}></i>
                             <p>{publication.likes.length} curtidas</p>
                         </div>
                       </div>
-                      {/* <div className={feed.openCommentsContainer}>
-                        <div className={feed.openComments}>
+                      {/* <div className={publi.openCommentsContainer}>
+                        <div className={publi.openComments}>
                           <p>Abrir comentarios</p>
                           <i className={"bi bi-chevron-down"}></i>
                         </div>

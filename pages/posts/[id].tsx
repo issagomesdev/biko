@@ -1,6 +1,6 @@
 import Cookie from 'js-cookie';
 import React from 'react';
-import feed from '../../styles/feed.module.css';
+import publi from '../../styles/ultils/publications.module.css';
 import { useState, useEffect } from 'react';
 import { Publication } from '../../models/Publication';
 import { PublicationService } from '../../services/publicationService';
@@ -9,15 +9,10 @@ import { toast } from 'react-toastify';
 import { TailSpin } from 'react-loader-spinner';
 import { User } from '../../models/User';
 import { UserService } from '../../services/userService';
-import Options from './../../components/ultils/Options';
-import ModalConfirm from "./../../components/ultils/ModalConfirm";
+import Options from '../../components/ultils/Options';
+import ModalConfirm from "../../components/ultils/ModalConfirm";
 import Sidebar from '../../components/Sidebar';
 import styles from '../../styles/home.module.css';
-
-
-interface PageProps {
-    id: number;
-}
 
 export default function PublicationPage() {
     const router = useRouter();
@@ -80,6 +75,8 @@ export default function PublicationPage() {
         }
     }
 
+    getUser();
+
     const getPublication = async () => {
         try {
             const data:any = await PublicationService.getPublication(id, token);
@@ -107,22 +104,20 @@ export default function PublicationPage() {
         getPublication();
     }, [id]);
     
-    getUser();
-    
     const openModal = (title: string, message: string, onConfirm: () => void) => {
         setModalProps((prev) => ({
-        ...prev,
-        open: true,
-        onConfirm,
-        title,
-        message,
+            ...prev,
+            open: true,
+            onConfirm,
+            title,
+            message,
         }));
     };
 
     const deletePublication = async() => {
         setModalProps((prev) => ({ ...prev, open: false }))
-        const toast_id = toast.loading('Excluindo, aguarde...', {
-        position: "top-right",
+            const toast_id = toast.loading('Excluindo, aguarde...', {
+            position: "top-right"
         });
         
         try {
@@ -162,18 +157,18 @@ export default function PublicationPage() {
 
     const updateLike = async () => {
         try {
-        setPublication(() => {
-            const hasLiked = publication.likes.some(like => like.user_id === user?.id);
-            return {
-                ...publication,
-                likes: hasLiked
-                    ? publication.likes.filter(like => like.user_id !== user?.id)
-                    : [...publication.likes, { id: Date.now(), user_id: user?.id, publication_id: publication.id, created_at: new Date().toISOString(), updated_at: new Date().toISOString() }] 
-            };
-        });
+            setPublication(() => {
+                const hasLiked = publication.likes.some(like => like.user_id === user?.id);
+                return {
+                    ...publication,
+                    likes: hasLiked
+                        ? publication.likes.filter(like => like.user_id !== user?.id)
+                        : [...publication.likes, { id: Date.now(), user_id: user?.id, publication_id: publication.id, created_at: new Date().toISOString(), updated_at: new Date().toISOString() }] 
+                };
+            });
 
-        const data: any = await PublicationService.likePublication(publication.id, token);
-        if (!data.success)  throw new Error('Erro ao atualizar like');
+            const data: any = await PublicationService.likePublication(publication.id, token);
+            if (!data.success)  throw new Error('Erro ao atualizar like');
         } catch (error: any) {
             if (error.status === 401) {
                 console.error('Erro:', error);
@@ -210,22 +205,22 @@ export default function PublicationPage() {
 
     const renderPublication = () => {
         return (
-            <div key={publication.id} className={feed.publication}>
-                <div className={feed.publicationContainer}>
-                    <div className={feed.header}>
-                        <div className={feed.author}>
+            <div key={publication.id} style={{width: '100%'}}>
+                <div className={publi.publicationContainer}>
+                    <div className={publi.header}>
+                        <div className={publi.author}>
                             <i className={`bi bi-person-circle`}></i>
                             <h3>{publication.author.name}</h3>
                             <span>{publication.type === 0? 'cliente' : 'prestador de serviços'}</span>
                         </div>
-                        <div className={feed.corner}>
+                        <div className={publi.corner}>
                             <p>{formatDate(publication.created_at)}</p>
                             {publication.author.id === user?.id ?<Options 
                                 trigger={<i className={"bi bi-three-dots-vertical"}></i>}
                                 items={[{ label: 'Excluir Publicação', onClick: () => openModal('Confirmação de Exclusão', 'Você está prestes a excluir esta publicação. Essa ação é irreversível. Tem certeza de que deseja continuar?', () => { deletePublication() }) }]}/> : ''}
                         </div>
                     </div>
-                    <div className={feed.publicationContent}>
+                    <div className={publi.publicationContent}>
                         <h2>{publication.title}</h2>
                         <p> {publication.text.split('\n').map((line, index) => (
                                 <React.Fragment key={index}>
@@ -235,23 +230,57 @@ export default function PublicationPage() {
                             ))}
                         </p>
                     </div>
-                    <div className={feed.tags}>
+                    <div className={publi.tags}>
                         {publication.categories.map((category) => (
                         <p key={category.id}>{category.name}</p>
                         ))}
                     </div>
-                    <div className={feed.footer}>
-                        <div className={feed.items}>
-                            <div className={feed.item}>
+                    <div className={publi.footer}>
+                        <div className={publi.items}>
+                            <div className={publi.item}>
                                 <i className={`bi bi-chat-left`}></i>
                                 <p>{publication.comments.length} comentários</p>
                             </div>
-                            <div className={feed.item}>
+                            <div className={publi.item}>
                                 <i className={`bi bi-hand-thumbs-up${user && publication.likes.find(like => like.user_id == user.id) ? '-fill' : ''}`} onClick={() => updateLike()}></i>
                                 <p>{publication.likes.length} curtidas</p>
                             </div>
                         </div>
                     </div>
+                </div>
+                
+                <div className={publi.reply}>
+                    <i className={`bi bi-person-circle`}></i>
+                    <input type="text" placeholder='Postar sua resposta'/>
+                    <button>Responder</button>
+                </div>
+
+                <div className={publi.comments}>
+                {publication.comments.map(comment => {
+                    return (
+                        <div className={publi.comment}>
+                            <div className={publi.header}>
+                                <div className={publi.author}>
+                                    <i className={`bi bi-person-circle`}></i>
+                                    <h3>{comment.author.name}</h3>
+                                </div>
+                                <div className={publi.corner}>
+                                    <p>{formatDate(comment.created_at)}</p>
+                                </div>
+                            </div>
+                            <div className={publi.content}>
+                                <p>
+                                    {comment.comment.split('\n').map((line, index) => (
+                                        <React.Fragment key={index}>
+                                        {line}
+                                        <br />
+                                        </React.Fragment>
+                                    ))}
+                                </p>
+                            </div>
+                        </div>
+                    )
+                })}
                 </div>
             </div>
         )
