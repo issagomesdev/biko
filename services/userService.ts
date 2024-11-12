@@ -3,7 +3,7 @@ import { User } from '../models/User';
 
 export class UserService {
 
-  static async getAuthUser(token:string): Promise<User[]> {
+  static async getAuthUser(token:string|undefined): Promise<User[]> {
     const options: RequestInit = {
       method: 'GET',
       headers: {
@@ -17,7 +17,7 @@ export class UserService {
     return data.data;
   }
 
-  static async getUsers(token:string): Promise<User[]> {
+  static async getUsers(token:string|undefined): Promise<User[]> {
     const options: RequestInit = {
       method: 'GET',
       headers: {
@@ -31,7 +31,7 @@ export class UserService {
     return data.data;
   }
 
-  static async getUser(token:string, UserID:number): Promise<User[]> {
+  static async getUser(token:string|undefined, UserID:number): Promise<User[]> {
     const options: RequestInit = {
       method: 'GET',
       headers: {

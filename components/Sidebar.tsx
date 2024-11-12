@@ -38,6 +38,11 @@ export default function Sidebar() {
       router.push('/');
   
     }
+
+    const goRoute = (route:string) => {
+      router.push(route);
+    }
+
     return (
         <div className={styles.sidebar}>
             <div className={styles.center}>
@@ -45,6 +50,7 @@ export default function Sidebar() {
                 <div className={styles.perfil}>
                   <h2><i className={`bi bi-person-circle`}></i></h2>
                 </div>
+                <li onClick={() => goRoute('/')}> <i className={`bi bi-house-door`}></i> </li>
                 <hr/>
                 <li><i className={`bi bi-search`}></i></li>
                 <hr/>
@@ -54,8 +60,7 @@ export default function Sidebar() {
                 <hr/>
                 <li><i className={`bi bi-bell-fill`}></i></li>
                 <hr/>
-                <li><i className={`bi bi-plus-square-dotted`}></i></li>
-                <li onClick={handleLogout}> <i className={`bi bi-box-arrow-left`}></i> </li>
+                <li onClick={handleLogout}><i className={`bi bi-box-arrow-left`}></i></li>
               </ul>
             </div>
         </div>

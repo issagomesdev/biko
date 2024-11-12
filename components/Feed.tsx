@@ -1,6 +1,7 @@
 import Cookie from 'js-cookie';
 import React from 'react';
-import styles from '../styles/feed.module.css';
+import feed from '../styles/feed.module.css';
+import ultils from '../styles/ultils/categorySelector.module.css';
 import { useState, useEffect } from 'react';
 import { Publication, newPublication, filterPublication } from '../models/Publication';
 import { PublicationService } from '../services/publicationService';
@@ -14,16 +15,29 @@ import { Category } from '../models/Category';
 import { CategoryService } from '../services/categoryService';
 import { State } from '../models/State';
 import { City } from '../models/City';
-
-interface MultilineTextProps {
-  text: string;
-}
+import Options from './ultils/Options';
+import ModalConfirm from "./ultils/ModalConfirm";
 
 export default function FeedPage() {
 
   const router = useRouter();
   const [writePost, setWritePost] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [dataPublications, setDataPublications] = useState<Publication[]>([]);
+  const token:string|undefined = Cookie.get('token');
+  const [user, setUser] = useState<User>();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [openCategories, setOpenCategories] = useState(false);
+  const [openCategoriesFilter, setOpenCategoriesFilter] = useState(false);
+  const [states, setStates] = useState<State[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
+  const [modalProps, setModalProps] = useState({
+    open: false,
+    onClose: () => setModalProps((prev) => ({ ...prev, open: false })),
+    onConfirm: () => {},
+    title: '',
+    message: ''
+  });
   const [newPublication, setNewPublication] = useState<newPublication>({
     title: '',
     text: '',
@@ -38,20 +52,12 @@ export default function FeedPage() {
     state: '',
     city: '',
     neighborhood: ''
-  })
-  const [dataPublications, setDataPublications] = useState<Publication[]>([]);
-  const token:string|undefined = Cookie.get('token');
-  const [user, setUser] = useState<User>();
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [openCategories, setOpenCategories] = useState(false);
-  const [openCategoriesFilter, setOpenCategoriesFilter] = useState(false);
-  const [states, setStates] = useState<State[]>([]);
-  const [cities, setCities] = useState<City[]>([]);
+  });
 
   useEffect(() => {
       const getUser = async () => {
         try {
-          const data:any = await UserService.getAuthUser(token ?? '');
+          const data:any = await UserService.getAuthUser(token);
           setUser(data);
         } catch (error:any) {
           if(error.status == 401){ 
@@ -89,7 +95,7 @@ export default function FeedPage() {
   useEffect(() => {
       const getPublications = async () => {
         try {
-          const data:any = await PublicationService.getPublications(filter, token ?? '');
+          const data:any = await PublicationService.getPublications(filter, token);
           setDataPublications(data.data);
           setLoading(false);
         } catch (error:any) {
@@ -112,31 +118,41 @@ export default function FeedPage() {
       getPublications();
   }, [loading]);
 
+  const openModal = (title: string, message: string, onConfirm: () => void) => {
+    setModalProps((prev) => ({
+      ...prev,
+      open: true,
+      onConfirm,
+      title,
+      message,
+    }));
+  };
+
   const publicationChange = (e:any) => {
-        const { name, value } = e.target;
-        setNewPublication((prevState) => ({
-          ...prevState,
-          [name]: value,
-        }));
+          const { name, value } = e.target;
+          setNewPublication((prevState) => ({
+            ...prevState,
+            [name]: value,
+          }));
   };
 
   const FilterChange = (e:any) => {
-    const { name, value } = e.target;
+      const { name, value } = e.target;
+      setFilter((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+  };
+
+  const handleStateChange = async(e:any) => {
     setFilter((prevState) => ({
       ...prevState,
-      [name]: value,
+      state: e.target.value,
+      city: ''
     }));
-};
-
-const handleStateChange = async(e:any) => {
-  setFilter((prevState) => ({
-    ...prevState,
-    state: e.target.value,
-    city: ''
-  }));
-  const data = await IBGEService.getCities(e.target.value);
-  setCities(data);
-}
+    const data = await IBGEService.getCities(e.target.value);
+    setCities(data);
+  }
 
   const handleChangeCategories = async(categoryID:number) => {
     const exist = newPublication.categories.includes(categoryID);
@@ -163,7 +179,7 @@ const handleStateChange = async(e:any) => {
           position: "top-right",
       });
       try {
-          const data:any = await PublicationService.createPublication(newPublication, token ?? '');
+          const data:any = await PublicationService.createPublication(newPublication, token);
           if (data.success) {
             toast.update(toast_id, {
               render: "Anúncio publicado com sucesso!",
@@ -205,16 +221,50 @@ const handleStateChange = async(e:any) => {
       }
   }
 
-  const MultilineText: React.FC<MultilineTextProps> = ({text}) => (
-    <p>
-      {text.split('\n').map((line, index) => (
-        <React.Fragment key={index}>
-          {line}
-          <br />
-        </React.Fragment>
-      ))}
-    </p>
-  );
+  const deletePublication = async(id:number) => {
+    setModalProps((prev) => ({ ...prev, open: false }))
+    const toast_id = toast.loading('Excluindo, aguarde...', {
+      position: "top-right",
+    });
+    
+  try {
+      const data:any = await PublicationService.deletePublication(id, token);
+      if (data.success) {
+        toast.update(toast_id, {
+          render: "Publicação excluida com sucesso!",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      } else {
+        toast.update(toast_id, {
+          render: data.message,
+          type: "error",
+          isLoading: false,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }
+      setLoading(true);
+  } catch (error) {
+      console.error('Erro ao publicar o anúncio:', error);
+  } 
+  }
+
+  const openPublication = async(id:number) => {
+    router.push(`/publications/${id}`);
+  }
 
   const checkRequerimentsPublish = () => {
     if(newPublication.title.trim().length < 1){
@@ -278,31 +328,48 @@ const handleStateChange = async(e:any) => {
     setLoading(true);
   }
 
-  const updateLike = (pubID: number) => {
-    setDataPublications(prevData =>
-      prevData.map(pub =>
-        pub.id === pubID
-          ? {
-              ...pub,
-              likes: [
-                ...pub.likes,
-                {
-                  id: 435,
-                  user_id: 5,
-                  publication_id: 68,
-                  created_at: "2024-09-22T21:28:17.000000Z",
-                  updated_at: "2024-09-22T21:28:17.000000Z"
-                }
-              ]
+  const updateLike = async (pubID: number) => {
+    try {
+      setDataPublications(prevPublications => 
+        prevPublications.map(publication => {
+            if (publication.id === pubID) {
+                const hasLiked = publication.likes.some(like => like.user_id === user?.id);
+                return {
+                    ...publication,
+                    likes: hasLiked
+                        ? publication.likes.filter(like => like.user_id !== user?.id)
+                        : [...publication.likes, { id: Date.now(), user_id: user?.id, publication_id: pubID, created_at: new Date().toISOString(), updated_at: new Date().toISOString() }] // Use valores padrão
+                };
             }
-          : pub
-      )
-    );
-  };
-  
+            return publication;
+        })
+      );
+
+      const data: any = await PublicationService.likePublication(pubID, token);
+      if (!data.success) {
+        throw new Error('Erro ao atualizar like');
+      }
+    } catch (error: any) {
+        if (error.status === 401) {
+            console.error('Erro:', error);
+            toast.info("Desconectado", {
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+            Cookie.remove('token');
+            router.push('/');
+        }
+    }
+};
+
   const renderPublications = () => {
     return (
-        <div className={styles.publications}>
+        <div className={feed.publications}>
           {dataPublications.map(publication => {
             const formatDate = (value:string) => {
               const publicationDate = new Date(value);
@@ -321,36 +388,58 @@ const handleStateChange = async(e:any) => {
             };
     
             return (
-              <div key={publication.id} className={styles.publication}>
-                <div className={styles.publicationContainer}>
-                  <div className={styles.header}>
-                      <div className={styles.author}>
+              <div key={publication.id} className={feed.publication}>
+                <div className={feed.publicationContainer}>
+                  <div className={feed.header}>
+                      <div className={feed.author}>
                           <i className={`bi bi-person-circle`}></i>
                           <h3>{publication.author.name}</h3>
                           <span>{publication.type === 0? 'cliente' : 'prestador de serviços'}</span>
                       </div>
-                      <div className={styles.period}>
+                      <div className={feed.corner}>
                           <p>{formatDate(publication.created_at)}</p>
+                          <Options 
+                            trigger={<i className={"bi bi-three-dots-vertical"}></i>}
+                            items={[
+                              {label: 'Abrir Publicação', onClick: () => openPublication(publication.id) },
+                              ...(publication.author.id === user?.id ?
+                                [{ label: 'Excluir Publicação', onClick: () => openModal('Confirmação de Exclusão', 'Você está prestes a excluir esta publicação. Essa ação é irreversível. Tem certeza de que deseja continuar?', () => { deletePublication(publication.id) }) }] :
+                              [])
+                            ]}/>
                       </div>
                   </div>
-                  <div className={styles.publicationContent}>
+                  <div className={feed.publicationContent}>
                       <h2>{publication.title}</h2>
-                      <MultilineText text={publication.text} />
+                      <p> {publication.text.split('\n').map((line, index) => (
+                            <React.Fragment key={index}>
+                              {line}
+                              <br />
+                            </React.Fragment>
+                          ))}
+                      </p>
                   </div>
-                  <div className={styles.tags}>
+                  <div className={feed.tags}>
                     {publication.categories.map((category) => (
                       <p key={category.id}>{category.name}</p>
                     ))}
                   </div>
-                  <div className={styles.footer}>
-                      <div className={styles.item}>
-                          <i className={`bi bi-chat-left`}></i>
-                          <p>{publication.comments.length} comentários</p>
+                  <div className={feed.footer}>
+                      <div className={feed.items}>
+                        <div className={feed.item}>
+                            <i className={`bi bi-chat-left`}></i>
+                            <p>{publication.comments.length} comentários</p>
+                        </div>
+                        <div className={feed.item}>
+                            <i className={`bi bi-hand-thumbs-up${user && publication.likes.find(like => like.user_id == user.id) ? '-fill' : ''}`} onClick={() => updateLike(publication.id)}></i>
+                            <p>{publication.likes.length} curtidas</p>
+                        </div>
                       </div>
-                      <div className={styles.item}>
-                          <i className={`bi bi-hand-thumbs-up`} onClick={() => updateLike(publication.id)}></i>
-                          <p>{publication.likes.length} curtidas</p>
-                      </div>
+                      {/* <div className={feed.openCommentsContainer}>
+                        <div className={feed.openComments}>
+                          <p>Abrir comentarios</p>
+                          <i className={"bi bi-chevron-down"}></i>
+                        </div>
+                      </div> */}
                   </div>
                 </div>
               </div>
@@ -362,17 +451,17 @@ const handleStateChange = async(e:any) => {
  
   const renderWritePost = () => {
     return (
-      <div className={styles.writePost}>
-        <div className={styles.textarea}>
+      <div className={feed.writePost}>
+        <div className={feed.textarea}>
             <input type="text" id="title" name="title" placeholder="Crie um título" onChange={publicationChange} style={!writePost ? { display: 'none' } : {}} value={newPublication.title}/>
             <textarea id="text" name="text" placeholder="Quer anunciar algo?" style={writePost ? { height: '200px' } : {}} onFocus={() => { setWritePost(true)}} onChange={publicationChange} value={newPublication.text}></textarea>
-            <div className={styles.shortcuts} style={!writePost ? { display: 'none' } : {}}>
-                <div className={styles.attach}>
+            <div className={feed.shortcuts} style={!writePost ? { display: 'none' } : {}}>
+                <div className={feed.attach}>
                     <i className={`bi bi-image`}></i>
                     <p>Anexar Mídia</p>
                 </div>
-                <div className={styles.customField}>
-                  <div className={styles.selectContainer}>
+                <div className={feed.customField}>
+                  <div className={feed.selectContainer}>
                     <p>Anunciar como: </p>
                     <select name="type" id="type" value={newPublication.type} onChange={publicationChange}>
                       <option value="0">Cliente</option>
@@ -380,18 +469,18 @@ const handleStateChange = async(e:any) => {
                     </select>
                   </div>
                 </div>
-                <div className={styles.customField}>
-                  <div className={styles.selectContainer} onClick={() => setOpenCategories(openCategories? false : true)}>
+                <div className={feed.customField}>
+                  <div className={feed.selectContainer} onClick={() => setOpenCategories(openCategories? false : true)}>
                     <p>Escolha uma ou mais categorias relacionadas ao anúncio <span>{newPublication.categories.length}</span></p>
                     <i className={openCategories? "bi bi-caret-up-fill" : "bi bi-caret-down-fill"}></i>
                   </div>
-                  {openCategories? <div className={styles.categoriesContent}>
+                  {openCategories? <div className={ultils.categoriesContent}>
                   <p onClick={() => setNewPublication((prevState) => ({...prevState, categories: []}))}>Limpar seleção</p>
-                  <div className={styles.categories}>
+                  <div className={ultils.categories}>
                     {categories.map((category) => (
-                        <div key={category.id} className={styles.category} onClick={() => handleChangeCategories(category.id)}>
-                          <div className={styles.checkbox}>
-                            <div className={styles.box}>
+                        <div key={category.id} className={ultils.category} onClick={() => handleChangeCategories(category.id)}>
+                          <div className={ultils.checkbox}>
+                            <div className={ultils.box}>
                               <i className={newPublication.categories.includes(category.id)? "bi bi-check" : ""}></i>
                             </div>
                           </div>
@@ -403,7 +492,7 @@ const handleStateChange = async(e:any) => {
                 </div>
             </div>
         </div>
-        <div className={styles.publish}>
+        <div className={feed.publish}>
             <button onClick={checkRequerimentsPublish} style={!writePost ? { display: 'none' } : {}}>Postar</button>
             <button onClick={cancelPublish} id="cancel" style={!writePost ? { display: 'none' } : {}}>Cancelar</button>
         </div>
@@ -413,12 +502,12 @@ const handleStateChange = async(e:any) => {
 
   const renderHeader = () => {
     return (
-      <div className={styles.header}>
+      <div className={feed.header}>
         <h1>Publicações</h1>
         
-        <div className={styles.search}>
-          <div className={styles.customField}>
-            <div className={styles.selectContainer}>
+        <div className={feed.search}>
+          <div className={feed.customField}>
+            <div className={feed.selectContainer}>
             <i className={"bi bi-search"}></i>
               <input type="search" name="search" id="search" placeholder='pesquisar...' onChange={FilterChange}/>
             </div>
@@ -427,9 +516,9 @@ const handleStateChange = async(e:any) => {
           <button onClick={filterPublications}>Buscar</button>
         </div>
 
-        <div className={styles.filters}>
-          <div className={styles.customField}>
-            <div className={styles.selectContainer}>
+        <div className={feed.filters}>
+          <div className={feed.customField}>
+            <div className={feed.selectContainer}>
               <p>Filtrar postagens por: </p>
               <select name="type" id="type" value={filter.type} onChange={FilterChange}>
                 <option value="">todos</option>
@@ -439,25 +528,25 @@ const handleStateChange = async(e:any) => {
             </div>
           </div>
 
-          <div className={styles.customField}>
-            <div className={styles.selectContainer} onClick={() => setOpenCategoriesFilter(openCategoriesFilter? false : true)}>
+          <div className={feed.customField}>
+            <div className={feed.selectContainer} onClick={() => setOpenCategoriesFilter(openCategoriesFilter? false : true)}>
               <p>Categorias relacionadas as postagens <span>{filter.categories.length > 0 ? filter.categories.length : 'todas'}</span></p>
               <i className={openCategoriesFilter? "bi bi-caret-up-fill" : "bi bi-caret-down-fill"}></i>
             </div>
-            {openCategoriesFilter? <div className={styles.categoriesContent}>
-            <div className={styles.categories}>
-                  <div className={styles.category} onClick={() => setFilter((prevState) => ({...prevState, categories: []}))}>
-                    <div className={styles.checkbox}>
-                      <div className={styles.box}>
+            {openCategoriesFilter? <div className={ultils.categoriesContent}>
+            <div className={ultils.categories}>
+                  <div className={ultils.category} onClick={() => setFilter((prevState) => ({...prevState, categories: []}))}>
+                    <div className={ultils.checkbox}>
+                      <div className={ultils.box}>
                         <i className={filter.categories.length < 1? "bi bi-check" : ""}></i>
                       </div>
                     </div>
                     <p>Todas</p>
                   </div>
               {categories.map((category) => (
-                  <div key={category.id} className={styles.category} onClick={() => handleChangeCategoriesFilter(category.id)}>
-                    <div className={styles.checkbox}>
-                      <div className={styles.box}>
+                  <div key={category.id} className={ultils.category} onClick={() => handleChangeCategoriesFilter(category.id)}>
+                    <div className={ultils.checkbox}>
+                      <div className={ultils.box}>
                         <i className={filter.categories.includes(category.id)? "bi bi-check" : ""}></i>
                       </div>
                     </div>
@@ -468,8 +557,8 @@ const handleStateChange = async(e:any) => {
             </div> : ''}
           </div>
           
-          <div className={styles.customField}>
-            <div className={styles.selectContainer}>
+          <div className={feed.customField}>
+            <div className={feed.selectContainer}>
               <p>Filtrar por local: </p>
               <select name="state" id="state" value={filter.state} onChange={handleStateChange}>
                 <option selected value=''>Selecione estado</option>
@@ -487,8 +576,8 @@ const handleStateChange = async(e:any) => {
             </div>
           </div>
 
-          <div className={styles.customField}>
-            <div className={styles.selectContainer}>
+          <div className={feed.customField}>
+            <div className={feed.selectContainer}>
               <p>Ordenar por: </p>
               <select name="orderBy" id="orderBy" value={filter.orderBy} onChange={FilterChange}>
                 <option value="desc">mais recente</option>
@@ -503,10 +592,17 @@ const handleStateChange = async(e:any) => {
   }
 
   return (
-      <div className={styles.feedContainer}>
+      <div className={feed.feedContainer}>
+            <ModalConfirm
+            isOpen={modalProps.open}
+            onClose={modalProps.onClose}
+            onConfirm={modalProps.onConfirm}
+            title={modalProps.title}
+            message={modalProps.message}
+          />
           {renderWritePost()}
           {renderHeader()}
-          <div className={styles.feedContent}>
+          <div className={feed.feedContent}>
               { loading? 
                   <TailSpin
                   visible={true}
