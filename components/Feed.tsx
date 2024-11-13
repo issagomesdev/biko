@@ -2,7 +2,7 @@ import Cookie from 'js-cookie';
 import React from 'react';
 import feed from '../styles/feed.module.css';
 import publi from '../styles/ultils/publications.module.css';
-import ultils from '../styles/ultils/categorySelector.module.css';
+import cselector from '../styles/ultils/categorySelector.module.css';
 import { useState, useEffect } from 'react';
 import { Publication, newPublication, filterPublication } from '../models/Publication';
 import { PublicationService } from '../services/publicationService';
@@ -102,7 +102,7 @@ export default function FeedPage() {
         } catch (error:any) {
           if(error.status == 401){ 
             console.error('Erro:', error);
-            toast.info("Desconectado", {
+            toast.error(error, {
               autoClose: 5000,
               hideProgressBar: false,
               closeOnClick: true,
@@ -111,8 +111,6 @@ export default function FeedPage() {
               progress: undefined,
               theme: "dark",
             });
-            Cookie.remove('token');
-            router.push('/');
           }
         }
       };
@@ -130,19 +128,19 @@ export default function FeedPage() {
   };
 
   const publicationChange = (e:any) => {
-          const { name, value } = e.target;
-          setNewPublication((prevState) => ({
-            ...prevState,
-            [name]: value,
-          }));
+    const { name, value } = e.target;
+    setNewPublication((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   const FilterChange = (e:any) => {
-      const { name, value } = e.target;
-      setFilter((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
+    const { name, value } = e.target;
+    setFilter((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   const handleStateChange = async(e:any) => {
@@ -353,7 +351,7 @@ export default function FeedPage() {
     } catch (error: any) {
         if (error.status === 401) {
             console.error('Erro:', error);
-            toast.info("Desconectado", {
+            toast.error(error, {
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -362,8 +360,6 @@ export default function FeedPage() {
                 progress: undefined,
                 theme: "dark",
             });
-            Cookie.remove('token');
-            router.push('/');
         }
     }
 };
@@ -475,13 +471,13 @@ export default function FeedPage() {
                     <p>Escolha uma ou mais categorias relacionadas ao anúncio <span>{newPublication.categories.length}</span></p>
                     <i className={openCategories? "bi bi-caret-up-fill" : "bi bi-caret-down-fill"}></i>
                   </div>
-                  {openCategories? <div className={ultils.categoriesContent}>
+                  {openCategories? <div className={cselector.categoriesContent}>
                   <p onClick={() => setNewPublication((prevState) => ({...prevState, categories: []}))}>Limpar seleção</p>
-                  <div className={ultils.categories}>
+                  <div className={cselector.categories}>
                     {categories.map((category) => (
-                        <div key={category.id} className={ultils.category} onClick={() => handleChangeCategories(category.id)}>
-                          <div className={ultils.checkbox}>
-                            <div className={ultils.box}>
+                        <div key={category.id} className={cselector.category} onClick={() => handleChangeCategories(category.id)}>
+                          <div className={cselector.checkbox}>
+                            <div className={cselector.box}>
                               <i className={newPublication.categories.includes(category.id)? "bi bi-check" : ""}></i>
                             </div>
                           </div>
@@ -534,20 +530,20 @@ export default function FeedPage() {
               <p>Categorias relacionadas as postagens <span>{filter.categories.length > 0 ? filter.categories.length : 'todas'}</span></p>
               <i className={openCategoriesFilter? "bi bi-caret-up-fill" : "bi bi-caret-down-fill"}></i>
             </div>
-            {openCategoriesFilter? <div className={ultils.categoriesContent}>
-            <div className={ultils.categories}>
-                  <div className={ultils.category} onClick={() => setFilter((prevState) => ({...prevState, categories: []}))}>
-                    <div className={ultils.checkbox}>
-                      <div className={ultils.box}>
+            {openCategoriesFilter? <div className={cselector.categoriesContent}>
+            <div className={cselector.categories}>
+                  <div className={cselector.category} onClick={() => setFilter((prevState) => ({...prevState, categories: []}))}>
+                    <div className={cselector.checkbox}>
+                      <div className={cselector.box}>
                         <i className={filter.categories.length < 1? "bi bi-check" : ""}></i>
                       </div>
                     </div>
                     <p>Todas</p>
                   </div>
               {categories.map((category) => (
-                  <div key={category.id} className={ultils.category} onClick={() => handleChangeCategoriesFilter(category.id)}>
-                    <div className={ultils.checkbox}>
-                      <div className={ultils.box}>
+                  <div key={category.id} className={cselector.category} onClick={() => handleChangeCategoriesFilter(category.id)}>
+                    <div className={cselector.checkbox}>
+                      <div className={cselector.box}>
                         <i className={filter.categories.includes(category.id)? "bi bi-check" : ""}></i>
                       </div>
                     </div>

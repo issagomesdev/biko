@@ -1,3 +1,5 @@
+import { Category } from "./Category";
+
 export interface User {
     id:number,
     name:string,
@@ -6,7 +8,7 @@ export interface User {
     state:string,
     city:string,
     neighborhood:string,
-    categories:number[],
+    categories:Category[],
     created_at:string,
     updated_at:string
 }
@@ -20,4 +22,12 @@ export interface registerUser {
     city:string,
     neighborhood:string,
     categories: number[],
+}
+
+export interface filterUser {
+    search:string,
+    categories:number[],
+    state:string,
+    city:string,
+    neighborhood:string
 }

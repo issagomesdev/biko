@@ -44,6 +44,19 @@ export class PublicationService {
         return baseData('/publications', options);
     }
 
+    static async deletePublication(publication:number, token:string|undefined): Promise<any>{
+      const options: RequestInit = {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      }
+  
+      return baseData(`/publications/${publication}`, options);
+    }
+
     static async likePublication(publication:number, token:string|undefined): Promise<Publication> {
         const options: RequestInit = {
           method: 'POST',
@@ -57,17 +70,18 @@ export class PublicationService {
         return baseData(`/publications/like/${publication}`, options);
     }
 
-    static async deletePublication(publication:number, token:string|undefined): Promise<any>{
-      const options: RequestInit = {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
+    static async commentPublication(publication:number, comment:string, token:string|undefined): Promise<Publication> {
+        const options: RequestInit = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({comment})
         }
-      }
-  
-      return baseData(`/publications/${publication}`, options);
+    
+        return baseData(`/publications/comment/${publication}`, options);
     }
 
 

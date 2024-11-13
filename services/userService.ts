@@ -1,5 +1,5 @@
 import { baseData } from '../utils/api';
-import { User } from '../models/User';
+import { User, filterUser } from '../models/User';
 
 export class UserService {
 
@@ -17,18 +17,18 @@ export class UserService {
     return data.data;
   }
 
-  static async getUsers(token:string|undefined): Promise<User[]> {
+  static async getUsers(data:filterUser, token:string|undefined): Promise<User[]> {
     const options: RequestInit = {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
       },
+      body: JSON.stringify(data)
     };
 
-    const data:any = await baseData('/users', options);
-    return data.data;
+    return baseData('/users/filter', options);
   }
 
   static async getUser(token:string|undefined, UserID:number): Promise<User[]> {

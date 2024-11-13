@@ -52,7 +52,7 @@ export default function Sidebar() {
                 </div>
                 <li onClick={() => goRoute('/')}> <i className={`bi bi-house-door`}></i> </li>
                 <hr/>
-                <li><i className={`bi bi-search`}></i></li>
+                <li onClick={() => goRoute('/search')}><i className={`bi bi-search`}></i></li>
                 <hr/>
                 <li><i className={`bi bi-chat-left`}></i></li>
                 <hr/>

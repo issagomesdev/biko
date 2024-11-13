@@ -20,6 +20,7 @@ export default function PublicationPage() {
     const [loading, setLoading] = useState(true);
     const token:string|undefined = Cookie.get('token');
     const [user, setUser] = useState<User>();
+    const [comment, setComment] = useState('');
     const [modalProps, setModalProps] = useState({
         open: false,
         onClose: () => setModalProps((prev) => ({ ...prev, open: false })),
@@ -187,6 +188,48 @@ export default function PublicationPage() {
         }
     };
 
+    const commentPublication = async () => {
+        const toast_id = toast.loading('Publicando comentário, aguarde...', {
+            position: "top-right",
+        }); 
+        setLoading(true);
+        try {
+            const data:any = await PublicationService.commentPublication(publication.id, comment, token);
+            if (data.success) {
+              toast.update(toast_id, {
+                render: "Comentário publicado com sucesso!",
+                type: "success",
+                isLoading: false,
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+              });
+              setComment('');
+            } else {
+              toast.update(toast_id, {
+                render: data.message,
+                type: "error",
+                isLoading: false,
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+              });
+            }
+            getPublication();
+            setLoading(false);
+        } catch (error) {
+            console.error('Erro ao publicar o anúncio:', error);
+        }
+    }
+
     const formatDate = (value:string) => {
         const publicationDate = new Date(value);
         const now = new Date();
@@ -251,8 +294,8 @@ export default function PublicationPage() {
                 
                 <div className={publi.reply}>
                     <i className={`bi bi-person-circle`}></i>
-                    <input type="text" placeholder='Postar sua resposta'/>
-                    <button>Responder</button>
+                    <input type="text" placeholder='Postar sua resposta' value={comment} onChange={(e) => setComment(e.target.value)}/>
+                    <button onClick={commentPublication}>Responder</button>
                 </div>
 
                 <div className={publi.comments}>
