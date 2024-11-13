@@ -301,7 +301,7 @@ export default function PublicationPage() {
                 <div className={publi.comments}>
                 {publication.comments.map(comment => {
                     return (
-                        <div className={publi.comment}>
+                        <div key={publi.id} className={publi.comment}>
                             <div className={publi.header}>
                                 <div className={publi.author}>
                                     <i className={`bi bi-person-circle`}></i>

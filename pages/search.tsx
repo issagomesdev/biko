@@ -133,12 +133,12 @@ export default function Search() {
       <div className={search.users}>
       {users.map(data => {
             return (
-              <div className={search.user}>
+              <div key={data.id} className={search.user}>
                 <p>{data.name}</p>
                 <div className={search.categories}>
                   <p>{data.categories.map(category => {
                     return (
-                      <span>{category.name}, </span>
+                      <span key={category.id}>{category.name}, </span>
                     );
                   })
                     }</p>
