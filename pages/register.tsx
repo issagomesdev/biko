@@ -11,10 +11,10 @@ import styles from '../styles/form.module.css';
 import { State } from '../models/State';
 import { City } from '../models/City';
 import { Category } from '../models/Category';
-import { registerUser } from '../models/User';
+import { FormUser } from '../models/User';
 
 export default function RegisterPage() {
-  const [formData, setFormData] = useState<registerUser>({
+  const [formData, setFormData] = useState<FormUser>({
     name: '',
     email: '',
     password: '',
@@ -46,6 +46,17 @@ export default function RegisterPage() {
     loadCategories();
 
   }, [])
+
+  useEffect(() => {
+    const loadCities = async(id:string) => {
+        const data = await IBGEService.getCities(id);
+        setCities(data);
+    }
+
+    const index = states.findIndex(i => i.nome == formData.state);
+    if(index > -1) loadCities((states[index].id).toString());
+
+  }, [formData.state])
 
   const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -114,8 +125,6 @@ export default function RegisterPage() {
       state: e.target.value,
       city: ''
     }));
-    const data = await IBGEService.getCities(e.target.value);
-    setCities(data);
   }
 
   const handleChangeCategories = async(categoryID:number) => {
@@ -143,7 +152,7 @@ export default function RegisterPage() {
                     <div className={styles.fieldsGroup}>
                       <div className={styles.fields}>
                         <div className={styles.textfield}>
-                            <input type="text" id="name" name="name" placeholder="Nome completo" value={formData. name} onChange={handleChange} required/>
+                            <input type="text" id="name" name="name" placeholder="Nome completo" value={formData.name} onChange={handleChange} required/>
                         </div>
       
                         <div className={styles.textfield}>
@@ -164,7 +173,7 @@ export default function RegisterPage() {
                             <select name="state" id="state" value={formData.state} onChange={handleStateChange}>
                               <option selected value=''>Selecione estado </option>
                               {states.map((state) => (
-                                  <option key={state.id} value={state.id}> {state.nome} </option>
+                                  <option key={state.id} value={state.nome}> {state.nome} </option>
                               ))}
                             </select>
                         </div>
@@ -173,7 +182,7 @@ export default function RegisterPage() {
                             <select name="city" id="city" value={formData.city} onChange={handleChange}>
                               <option selected value=''>Selecione cidade </option>
                               {cities.map((city) => (
-                                  <option key={city.id} value={city.id}> {city.nome} </option>
+                                  <option key={city.id} value={city.nome}> {city.nome} </option>
                               ))}
                             </select>
                           </div> 
@@ -215,7 +224,7 @@ export default function RegisterPage() {
                         <input type="checkbox" name="termos" id="termos" required/>
                         Aceito os <span>Termos e Serviços</span>
                     </div>
-                    <button type="submit" className={styles.btnLogin}>Cadastrar</button>
+                    <button type="submit">Cadastrar</button>
                 </form>
                 <p><Link href="./login">Já tenho uma conta</Link></p>
             </div>

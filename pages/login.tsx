@@ -73,7 +73,7 @@ export default function LoginPage() {
                     <div className={styles.textfield}>
                         <input type="password" id="password" placeholder="Digite sua Senha" value={password} onChange={(e) => setPassword(e.target.value)} required/>
                     </div>
-                    <button type="submit" className={styles.btnLogin}>Login</button>
+                    <button type="submit">Login</button>
                 </form>
                 <p><Link href="/register">Não possuo uma conta</Link></p>
             </div>

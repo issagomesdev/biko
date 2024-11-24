@@ -117,6 +117,17 @@ export default function FeedPage() {
       getPublications();
   }, [loading]);
 
+  useEffect(() => {
+    const loadCities = async(id:string) => {
+        const data = await IBGEService.getCities(id);
+        setCities(data);
+    }
+
+    const index = states.findIndex(i => i.nome == filter.state);
+    if(index > -1) loadCities((states[index].id).toString());
+
+  }, [filter.state])
+
   const openModal = (title: string, message: string, onConfirm: () => void) => {
     setModalProps((prev) => ({
       ...prev,
@@ -149,8 +160,6 @@ export default function FeedPage() {
       state: e.target.value,
       city: ''
     }));
-    const data = await IBGEService.getCities(e.target.value);
-    setCities(data);
   }
 
   const handleChangeCategories = async(categoryID:number) => {
@@ -423,7 +432,7 @@ export default function FeedPage() {
                   <div className={publi.footer}>
                       <div className={publi.items}>
                         <div className={publi.item}>
-                            <i className={`bi bi-chat-left`}></i>
+                            <i className={`bi bi-chat-left`} onClick={() => openPublication(publication.id)}></i>
                             <p>{publication.comments.length} comentários</p>
                         </div>
                         <div className={publi.item}>
@@ -560,13 +569,13 @@ export default function FeedPage() {
               <select name="state" id="state" value={filter.state} onChange={handleStateChange}>
                 <option selected value=''>Selecione estado</option>
                 {states.map((state) => (
-                    <option key={state.id} value={state.id}> {state.nome} </option>
+                    <option key={state.id} value={state.nome}> {state.nome} </option>
                 ))}
               </select>
               <select name="city" id="city" value={filter.city} onChange={FilterChange}>
                 <option selected value=''>Selecione cidade</option>
                 {cities.map((city) => (
-                    <option key={city.id} value={city.id}> {city.nome} </option>
+                    <option key={city.id} value={city.nome}> {city.nome} </option>
                 ))}
               </select>
               <input type="text" name="neighborhood" id="neighborhood" placeholder='digite um bairro...' onChange={FilterChange}/>

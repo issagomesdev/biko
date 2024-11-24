@@ -1,4 +1,5 @@
 import { Category } from "./Category";
+import { Publication } from "./Publication";
 
 export interface User {
     id:number,
@@ -13,7 +14,21 @@ export interface User {
     updated_at:string
 }
 
-export interface registerUser {
+export interface FullUser {
+    id:number,
+    name:string,
+    email:string,
+    cpf:string,
+    state:string,
+    city:string,
+    neighborhood:string,
+    categories:Category[],
+    publications: Publication[],
+    created_at:string,
+    updated_at:string
+}
+
+export interface FormUser {
     name:string,
     email:string,
     password:string,

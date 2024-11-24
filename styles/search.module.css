@@ -15,6 +15,7 @@
 .filters {
     display: flex;
     margin-top: .5em;
+    margin-right: 1em;
     justify-content: flex-end;
     flex-wrap: wrap;
   }
@@ -81,6 +82,7 @@
 
 .search {
  display: flex;
+ margin-right: 1em;
 }
 
 .search .customField:first-child {
@@ -132,5 +134,86 @@
   flex: 0 0 calc(50% - 10px);
   box-sizing: border-box;
   border: 1px solid var(--secondary-bg-color);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
   padding: 1em;
+}
+
+.user .content {
+  display: flex;
+  border-radius: 9px 9px 0px 0px;
+  justify-content: flex-start;
+  width: 100%;
+  position: relative;
+}
+
+.user .content .icon i {
+  font-size: 6em;
+  color: var(--primary-color);
+  position: relative;
+  z-index: 9;
+}
+
+.user .content .icon i::after {
+  background-color: #cfd3d4;
+  content: "";
+  position: absolute;
+  width: .9em;
+  height: .9em;
+  right: 5px;
+  top: 5px;
+  z-index: -1;
+  border-radius: 50%;
+}
+
+.user .content .info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  margin-left: 1em;
+}
+
+.user .content .info h2 {
+  text-transform: capitalize;
+}
+
+.user .content .info h2, .user .content .info h4, .user .content .info h5, .user .content .info p {
+  margin: 0;
+}
+
+.user .content .info p {
+  margin-top: .2em;
+}
+
+.user .content .info p span {
+  font-size: .7em;
+  background-color: var(--secondary-bg-color);
+  color: var(--primary-color);
+  padding: 2px 5px;
+  margin-right: 4px;
+  border-radius: 4px;
+}
+
+.user .content .action {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  position: absolute;
+  top: 4.5em;
+  left: 0;
+}
+
+.user .content .action button{
+  margin-top: 1em;
+  width: -moz-fit-content;
+  width: fit-content;
+  border: var(--secondary-bg-color) 1px solid;
+  background-color: var(--main-bg-color);
+  padding: .5em 1em;
+  font-weight: 600;
+  border-radius: 25px;
+  cursor: pointer;
+  text-transform: uppercase;
 }
