@@ -70,7 +70,7 @@ export default function EditPerfil() {
       const data = await UserService.UpdateAuthUser(userID, user, token);
       if (data.success) {
         toast.update(toast_id, {
-          render: data.message,
+          render: "Perfil atualizado com sucesso!",
           type: "success",
           isLoading: false,
           autoClose: 5000,
