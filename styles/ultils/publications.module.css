@@ -89,6 +89,10 @@
     font-weight: 500;
 }
 
+.publicationContainer .publicationContent p {
+    word-wrap: break-word;
+}
+
 .publicationContainer .tags {
   display: flex;
   flex-wrap: wrap;
