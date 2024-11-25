@@ -1,7 +1,6 @@
 import styles from '../../styles/home.module.css';
 import Sidebar from  '../../components/Sidebar';
-import cselector from '../../styles/ultils/categorySelector.module.css';
-import perfil from '../../styles/perfil.module.css';
+import profile from '../../styles/profile.module.css';
 import { Category } from '../../models/Category';
 import { useState, useEffect } from 'react';
 import { State } from '../../models/State';
@@ -97,8 +96,43 @@ export default function EditPerfil() {
     getUser();
     getProfileUser();
     loadCategories();
-    setLoading(false);
-  }, []);
+    if(id && user && profileUser) setLoading(false);
+  }, [id, user, profileUser]);
+
+  const renderHeader = () => {
+    return (
+      <div className={profile.header}>
+        <div className={profile.banner}>
+          <div className={profile.icon}>
+            <i className={`bi bi-person-circle`}></i>
+          </div>
+          <div className={profile.actions}>
+            {profileUser?.id == user?.id? <button>
+              <i className={`bi bi-person-fill-gear`}></i>
+              <span>Editar Perfil</span>
+            </button> : 
+            <button>
+              <i className={`bi bi-messenger`}></i>
+              <span>Enviar Mensagem</span>
+            </button>}
+          </div>
+        </div>
+        
+        <div className={profile.infos}>
+          <h1>{profileUser?.name}</h1>
+          <h3>{profileUser?.state}, {profileUser?.city} </h3>
+          <div className={profile.categories}>
+            <p>{profileUser?.categories.map((category, index) => {
+                return (
+                  <span key={category.id}>{category.name}</span>
+                );
+              })}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
     return (
         <div className={styles.container}>
@@ -106,24 +140,21 @@ export default function EditPerfil() {
           <div className={styles.boxContent}>
             <div className={styles.content}>
               <Sidebar/>
-              <div className={perfil.container}>
-                <div className={perfil.content}>
-                  { loading? 
-                    <TailSpin
-                    visible={true}
-                    height="150"
-                    width="150"
-                    color="var(--secondary-bg-color)"
-                    ariaLabel="tail-spin-loading"
-                    radius="1"
-                    wrapperStyle={{}}
-                    wrapperClass=""/> : 
-                    
-                    <div>
-                        <h2>{profileUser?.name}</h2>
-                    </div>
-                  }
-                </div>
+              <div className={profile.container}>
+                { loading? 
+                  <TailSpin
+                  visible={true}
+                  height="150"
+                  width="150"
+                  color="var(--secondary-bg-color)"
+                  ariaLabel="tail-spin-loading"
+                  radius="1"
+                  wrapperStyle={{}}
+                  wrapperClass=""/> :
+                  <div className={profile.content}>
+                    {renderHeader()}
+                  </div>
+                }
               </div>
             </div>
           </div>

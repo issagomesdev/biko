@@ -1,0 +1,102 @@
+.container {
+    width: 100%;
+    margin: 1.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.content {
+    width: 100%;
+    height: 90%;
+    position: relative;
+}
+
+.header .banner {
+    width: 100%;
+    height: 13em;
+    background-color: var(--main-bg-color);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    margin-bottom: 6em;
+    position: relative;
+}
+
+.header .banner .icon {
+    top: 5em;
+    position: absolute;
+}
+
+.header .banner .icon i {
+    font-size: 13em;
+    color: var(--primary-color);
+    position: relative;
+    z-index: 9;
+}
+  
+.header .banner .icon i::after {
+    background-color: #cfd3d4;
+    content: "";
+    position: absolute;
+    width: .95em;
+    height: .95em;
+    right: 8px;
+    top: 10px;
+    z-index: -1;
+    border-radius: 50%;
+}
+
+.header .infos {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header .infos h1, .header .infos h3 {
+    margin: 0;
+    text-transform: capitalize;
+}
+
+.header .infos .categories {
+    width: 50%;
+}
+  
+.header .infos .categories p {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.header .infos .categories p span {
+    font-size: .7em;
+    background-color: var(--secondary-bg-color);
+    color: var(--primary-color);
+    padding: 2px 5px;
+    border-radius: 4px;
+}
+
+.header .banner .actions {
+    position: absolute;
+    bottom: -2.2em;
+    right: .5em;
+    display: flex;
+    gap: 5px;
+}
+
+.header .banner .actions button {
+    outline: none;
+    border: none;
+    background-color: var(--secondary-bg-color);
+    color: var(--primary-color);
+    border-radius: 4px;
+    padding: .5em 1em;
+    cursor: pointer;
+}
+
+.header .banner .actions button i {
+    margin-right: .4em;
+}

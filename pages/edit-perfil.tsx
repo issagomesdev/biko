@@ -81,7 +81,6 @@ export default function EditPerfil() {
           progress: undefined,
           theme: "dark",
         });
-        router.push('/login');
       }
     } catch (error:any) {
       const data = await error.data;
@@ -145,7 +144,6 @@ export default function EditPerfil() {
       const data = await CategoryService.getCategories();
       setCategories(data);
     }
-
 
     const loadStates = async() => {
       const data = await IBGEService.getStates();

@@ -149,7 +149,8 @@ export default function Search() {
                   </div>
                   <div className={search.info}>
                     <h2>{data.name}</h2>
-                    <h4>{data.state} - {data.city}</h4>
+                    <h4>Rio Grande do Norte, Baraúna
+                    </h4>
                     <h5>{data.publications.length} publicações</h5>
                     <div className={search.categories}>
                       <p>{data.categories.map((category, index) => {
@@ -161,7 +162,7 @@ export default function Search() {
                     </div>
 
                     <div className={search.action}>
-                      <button onClick={() => router.push(`/perfil/${data.id}`)}>Acessar Perfil</button>
+                      <button onClick={() => router.push(`/profile/${data.id}`)}>Acessar Perfil</button>
                     </div>
                   </div>
                 </div>
