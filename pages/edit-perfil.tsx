@@ -153,7 +153,7 @@ export default function EditPerfil() {
     getUser();
     loadCategories();
     loadStates();
-    setLoading(false);
+    if(user && states && categories && cities) setLoading(false);
   }, []);
 
 

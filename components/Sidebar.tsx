@@ -53,8 +53,8 @@ export default function Sidebar() {
                 <li className={router.pathname === '/' ? styles.active : ''} onClick={() => goRoute('/')}> <i className={`bi bi-house-door`}></i> </li>
                 <li className={router.pathname === '/edit-perfil' ? styles.active : ''} onClick={() => goRoute('/edit-perfil')}><i className={`bi bi-person-fill-gear`} onClick={() => goRoute('/edit-perfil')}></i></li>
                 <li className={router.pathname === '/search' ? styles.active : ''} onClick={() => goRoute('/search')}><i className={`bi bi-search`}></i></li>
-                <li><i className={`bi bi-chat-left`}></i></li>
-                <li><i className={`bi bi-bell-fill`}></i></li>
+                <li className={router.pathname === '/chat' ? styles.active : ''}><i className={`bi bi-chat-left`} onClick={() => goRoute('/chat')}></i></li>
+                <li className={router.pathname === '/notifications' ? styles.active : ''}><i className={`bi bi-bell-fill`} onClick={() => goRoute('/notifications')}></i></li>
                 <li onClick={handleLogout}><i className={`bi bi-box-arrow-left`}></i></li>
               </ul>
             </div>

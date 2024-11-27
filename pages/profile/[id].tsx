@@ -107,7 +107,7 @@ export default function EditPerfil() {
             <i className={`bi bi-person-circle`}></i>
           </div>
           <div className={profile.actions}>
-            {profileUser?.id == user?.id? <button>
+            {profileUser?.id == user?.id? <button onClick={() => router.push('/edit-perfil')}>
               <i className={`bi bi-person-fill-gear`}></i>
               <span>Editar Perfil</span>
             </button> : 

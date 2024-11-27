@@ -1,0 +1,153 @@
+.container {
+    width: 100%;
+    margin: 1.5em;
+  }
+  
+.container >h1 {
+    margin-bottom: 0;
+}
+  
+.content {
+    width: 100%;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.list, .chat  {
+    background-color: #ffffffc4;
+    width: 60%;
+    height: 95%;
+    border-radius: 10px;
+    position: relative;
+}
+
+.list .search {
+    background-color: #00000020;
+    border-radius: 10px;
+    padding: 1em 1em;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    width: -webkit-fill-available;
+    margin-bottom: 1em;
+}
+
+.list .search>input {
+    width: 100%;
+    background-color: #00000030;
+    border-radius: 15px;
+    padding: .5em 1em;
+    outline: none;
+    border: 0;
+    color: #fff;
+}
+
+.list .search>input::placeholder {
+    color: #fff;
+}
+
+.list .chats {
+    display: flex;
+    flex-direction: column;
+    height: 85%;
+    overflow: hidden scroll;
+}
+
+.list .chats .item {
+    width: -webkit-fill-available;
+    padding: .5em;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    cursor: pointer;
+    position: relative;
+}
+
+.list .chats .item::after {
+    background-color: #46434360;
+    content: "";
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    height: 1.5px;
+    z-index: 99;
+}
+
+.list .chats {
+    position: relative;
+}
+
+.item.selected {
+    background-color: #00000026;
+}
+
+.item .icon, .header .icon {
+   position: relative;
+}
+
+.item .icon::after, .header .icon::after {
+    background-color: #d13737;
+    content: "";
+    position: absolute;
+    width: .9em;
+    height: .9em;
+    right: 5px;
+    bottom: 15px;
+    border-radius: 50%;
+    z-index: 999;
+}
+
+.item.on .icon::after, .header.on .icon::after {
+    background-color: #4cd137;
+}
+
+.item .icon i, .header .icon i {
+    font-size: 6em;
+    color: var(--primary-color);
+    position: relative;
+    z-index: 9;
+}
+  
+.item .icon i::after, .header .icon i::after {
+    background-color: #cfd3d4;
+    content: "";
+    position: absolute;
+    width: .9em;
+    height: .9em;
+    right: 5px;
+    top: 5px;
+    z-index: -1;
+    border-radius: 50%;
+}
+
+.item .info {
+}
+
+.item .info p, .list .chats .item .info h3 {
+    margin: 0;
+}
+
+.chat {
+    width: 100%;
+}
+
+.header {
+    background-color: #00000020;
+    border-radius: 10px;
+    padding: 1em 1em;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    width: -webkit-fill-available;
+    margin-bottom: 1em;
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+.header .infos h2, .header .infos p {
+    margin: 0;
+}
