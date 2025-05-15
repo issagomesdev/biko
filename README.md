@@ -141,7 +141,7 @@ Overview of the main folders and files in the project:
 
 ```bash
 # Clone the repository
-git clone https://github.com/issagomesdev/biko
+git clone https://github.com/issagomesdev/biko.git
 
 cd biko
 
@@ -153,7 +153,6 @@ yarn install
 # Create a `.env.local` file and add the following environment variable:
 NEXT_PUBLIC_API_URL=your_api_url_here
 # Make sure the backend API is running and accessible at the URL set in NEXT_PUBLIC_API_URL.
-
 
 # Run the development server
 npm run dev
