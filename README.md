@@ -2,6 +2,9 @@
 
 ![Next.js](https://img.shields.io/badge/Next.js-000?style=for-the-badge&logo=next.js) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
+![Preview do site](https://biko.byissa.tech/midia/preview.png)
+
+
 ![Status](https://img.shields.io/badge/status-in_development-yellow) 
 
 <p align="center">
@@ -162,8 +165,3 @@ yarn dev
 <h2 id="related-projects">🔗 Related Projects</h2>
 
 🧱 Backend (Laravel API) repository [here](https://github.com/issagomesdev/biko-api)
-
-
-
-
-
