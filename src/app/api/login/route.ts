@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 
-const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL
+const API_URL = process.env.API_BASE_URL ?? process.env.NEXT_PUBLIC_API_BASE_URL
 
 export async function POST(req: NextRequest) {
   const body = await req.json()
@@ -17,9 +17,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(data, { status: upstream.status })
   }
 
-  const response = NextResponse.json({ success: true })
+  const token    = data.data?.token
+  const userData = data.data?.data
 
-  response.cookies.set("token", data.data.token, {
+  const response = NextResponse.json({
+    success:  true,
+    message:  data.message ?? null,
+    user: {
+      id:         userData.id,
+      name:       userData.name,
+      username:   userData.username,
+      email:      userData.email,
+      categories: userData.categories ?? [],
+      is_private: userData.is_private,
+      is_online:  userData.is_online,
+    },
+  })
+
+  response.cookies.set("token", token, {
     httpOnly: true,
     secure:   process.env.NODE_ENV === "production",
     sameSite: "lax",

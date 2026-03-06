@@ -9,9 +9,12 @@ interface RegisterDraft {
 }
 
 interface RegisterStore {
-  draft: RegisterDraft
+  draft:          RegisterDraft
+  emailError:     string | null
   setCredentials: (data: Pick<RegisterDraft, "name" | "email" | "password" | "role">) => void
   setCity:        (city_id: number) => void
+  setEmailError:  (msg: string) => void
+  clearEmailError: () => void
   reset:          () => void
 }
 
@@ -24,7 +27,8 @@ const INITIAL: RegisterDraft = {
 }
 
 export const useRegisterStore = create<RegisterStore>((set) => ({
-  draft: INITIAL,
+  draft:      INITIAL,
+  emailError: null,
 
   setCredentials: (data) =>
     set((s) => ({ draft: { ...s.draft, ...data } })),
@@ -32,5 +36,8 @@ export const useRegisterStore = create<RegisterStore>((set) => ({
   setCity: (city_id) =>
     set((s) => ({ draft: { ...s.draft, city_id } })),
 
-  reset: () => set({ draft: INITIAL }),
+  setEmailError:  (msg) => set({ emailError: msg }),
+  clearEmailError: ()   => set({ emailError: null }),
+
+  reset: () => set({ draft: INITIAL, emailError: null }),
 }))

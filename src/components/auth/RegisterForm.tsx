@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useEffect } from "react"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
@@ -11,15 +12,33 @@ import { Button } from "@/src/components/ui/Button"
 import { RoleSelector } from "./RoleSelector"
 
 export function RegisterForm() {
-  const router         = useRouter()
-  const setCredentials = useRegisterStore((s) => s.setCredentials)
+  const router           = useRouter()
+  const draft            = useRegisterStore((s) => s.draft)
+  const emailError       = useRegisterStore((s) => s.emailError)
+  const clearEmailError  = useRegisterStore((s) => s.clearEmailError)
+  const setCredentials   = useRegisterStore((s) => s.setCredentials)
 
   const {
     register,
     handleSubmit,
     control,
+    setError,
     formState: { errors, isSubmitting },
-  } = useForm<RegisterInput>({ resolver: zodResolver(registerSchema) })
+  } = useForm<RegisterInput>({
+    resolver:      zodResolver(registerSchema),
+    defaultValues: {
+      name:  draft.name,
+      email: draft.email,
+      role:  draft.role,
+    },
+  })
+
+  useEffect(() => {
+    if (emailError) {
+      setError("email", { message: emailError })
+      clearEmailError()
+    }
+  }, [emailError, setError, clearEmailError])
 
   function onSubmit(data: RegisterInput) {
     setCredentials({ name: data.name, email: data.email, password: data.password, role: data.role })

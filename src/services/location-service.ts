@@ -1,10 +1,11 @@
 import { api } from "./api"
+import { withCache } from "@/src/lib/cache"
 import type { ApiResponse, State, City } from "@/src/types/api"
 
 export const locationService = {
   getStates: () =>
-    api.get<ApiResponse<State[]>>("/states"),
+    withCache("states", () => api.get<ApiResponse<State[]>>("/states")),
 
   getCitiesByState: (stateId: number) =>
-    api.get<ApiResponse<City[]>>(`/states/${stateId}/cities`),
+    withCache(`cities:${stateId}`, () => api.get<ApiResponse<City[]>>(`/states/${stateId}/cities`)),
 }

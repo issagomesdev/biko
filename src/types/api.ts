@@ -23,13 +23,22 @@ export interface Category {
 }
 
 export interface AuthUser {
-  id:    number
-  name:  string
-  email: string
-  role:  "provider" | "client"
+  id:         number
+  name:       string
+  username:   string
+  email:      string
+  categories: Category[]
+  is_private: boolean | null
+  is_online:  boolean
 }
 
-export interface AuthResponse {
-  token: string
-  user:  AuthUser
+export interface LoginResponse {
+  success: true
+  message: string | null
+  user:    AuthUser
+}
+
+export interface RegisterResponse {
+  success: true
+  message: string | null
 }

@@ -11,9 +11,10 @@ import { authService } from "@/src/services/auth-service"
 import { Button } from "@/src/components/ui/Button"
 
 export function ServicesForm() {
-  const router = useRouter()
-  const draft  = useRegisterStore((s) => s.draft)
-  const reset  = useRegisterStore((s) => s.reset)
+  const router        = useRouter()
+  const draft         = useRegisterStore((s) => s.draft)
+  const reset         = useRegisterStore((s) => s.reset)
+  const setEmailError = useRegisterStore((s) => s.setEmailError)
 
   const { data: categoriesData, isLoading } = useCategories()
   const categories = categoriesData?.data ?? []
@@ -32,7 +33,7 @@ export function ServicesForm() {
     if (!draft.city_id) return
 
     try {
-      await authService.register({
+      const res = await authService.register({
         name:       draft.name,
         email:      draft.email,
         password:   draft.password,
@@ -40,9 +41,15 @@ export function ServicesForm() {
         categories: data.categories,
       })
       reset()
+      if (res.message) toast.success(res.message)
       router.push("/login")
     } catch (err: any) {
-      toast.error(err.message ?? "Erro ao criar conta")
+      const msg = err.message ?? "Erro ao criar conta"
+      toast.error(msg)
+      if (msg.toLowerCase().includes("e-mail") || msg.toLowerCase().includes("email")) {
+        setEmailError(msg)
+        router.push("/register")
+      }
     }
   }
 

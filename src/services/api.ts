@@ -1,15 +1,12 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
 async function fetcher<T>(endpoint: string, options?: RequestInit): Promise<T> {
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null
-
   const res = await fetch(`${BASE_URL}${endpoint}`, {
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
-    ...options,
+...options,
   })
 
   const isJson = res.headers.get("content-type")?.includes("application/json")

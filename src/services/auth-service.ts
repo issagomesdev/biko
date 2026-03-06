@@ -1,5 +1,5 @@
 import type { LoginInput } from "@/src/lib/validations/auth-schema"
-import { api } from "./api"
+import type { LoginResponse, RegisterResponse } from "@/src/types/api"
 
 export interface RegisterPayload {
   name:       string
@@ -9,24 +9,33 @@ export interface RegisterPayload {
   categories: number[]
 }
 
-async function post<T>(path: string, body: unknown): Promise<T> {
+async function internalPost<T>(path: string, body: unknown): Promise<T> {
   const res = await fetch(path, {
-    method:  "POST",
-    headers: { "Content-Type": "application/json" },
-    body:    JSON.stringify(body),
+    method:      "POST",
+    headers:     { "Content-Type": "application/json", "Accept": "application/json" },
+    body:        JSON.stringify(body),
+    credentials: "include",
   })
 
-  const data = await res.json()
+  const data = await res.json().catch(() => ({}))
 
   if (!res.ok) {
-    throw new Error(data.message ?? "Erro inesperado")
+    const firstFieldError = data.errors
+      ? Object.values(data.errors as Record<string, string[]>)[0]?.[0]
+      : null
+    throw new Error(firstFieldError ?? data.message ?? "Erro inesperado")
   }
 
   return data as T
 }
 
 export const authService = {
-  login: (data: LoginInput) => api.post<{ success: true }>("/login", data),
+  login: (data: LoginInput) =>
+    internalPost<LoginResponse>("/api/login", data),
 
-  register: (data: RegisterPayload) => api.post<{ success: true }>("/register", data),
+  register: (data: RegisterPayload) =>
+    internalPost<RegisterResponse>("/api/register", data),
+
+  logout: () =>
+    internalPost<{ success: boolean; message: string }>("/api/logout", {}),
 }

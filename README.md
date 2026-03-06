@@ -1,24 +1,24 @@
-# 🛠️ Biko — Social platform for service providers and seekers
+# Biko — Social platform for service providers and seekers
 
-![Next.js](https://img.shields.io/badge/Next.js-000?style=for-the-badge&logo=next.js) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-000?style=for-the-badge&logo=next.js) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-![Preview do site](https://biko.byissa.tech/midia/preview.png)
+![Preview do site](https://media.byissa.dev/biko/preview.png)
 
-
-![Status](https://img.shields.io/badge/status-in_development-yellow) 
+![Status](https://img.shields.io/badge/status-in_development-yellow)
 
 <p align="center">
   <a href="#about">About</a> •
   <a href="#roadmap">Roadmap</a> •
   <a href="#technologies">Technologies</a> •
   <a href="#structure">Structure</a> •
+  <a href="#tests">Tests</a> •
   <a href="#getting-started">Getting Started</a> •
   <a href="#related-projects">Related Projects</a>
 </p>
 
 **Biko** is a platform that connects clients to informal service providers, working like a social network where users can register, share their work, and interact through posts, likes and comments.
 
-This codebase handles the **Frontend** experience, developed in **Next.js** + **TypeScript** to create a clean and engaging interface.
+This codebase handles the **Frontend** experience, developed in **Next.js 14 App Router** + **TypeScript** + **Tailwind CSS** to create a clean and engaging interface.
 
 🔗 The backend API developed with Laravel is available [here](https://github.com/issagomesdev/biko-api).
 
@@ -26,21 +26,29 @@ This codebase handles the **Frontend** experience, developed in **Next.js** + **
 
 This project was developed as the final assignment for the Laboratory of Innovative Enterprises course in the Analysis and Systems Development (ADS) program at UNINASSAU. It aims to provide a practical solution connecting informal service providers with potential clients through a social platform, demonstrating the application of software development skills and innovative business concepts learned throughout the course.
 
-💻 You can try the live version at [biko.byissa.tech](https://biko.byissa.tech/)
+💻 You can try the live version at [biko.byissa.dev](https://biko.byissa.dev/)
 
 <h2 id="roadmap"> 🚧 Roadmap</h2>
 
 ### ✅ Implemented
 
-- User registration and authentication (login, logout)
+- Landing page (home) with sections: Hero, Stats, Features, How It Works, CTA, Footer
+- Multi-step user registration: credentials → location (state/city) → services (providers only)
+- Authentication with HttpOnly cookies (secure token storage via Next.js Route Handlers)
+- Login with redirect to feed and toast error feedback
+- Register with role selection (client or provider), Zod validation, and cross-step state via Zustand
+- Location selection with lazy-loaded cities (hidden until state is selected)
+- 3-day localStorage cache for states, cities, and categories (avoids redundant API calls)
+- API error handling: field-level messages extracted from Laravel's `errors` object shown as toasts
+- Email conflict detection: redirects back to register form with the error displayed under the email field
+
+
+### 🔄 Planned
 - Timeline-style publication of user content
 - Likes and comments for interaction
 - Post classification by category and user type (client or provider)
 - Filtering of posts by category, user type, location, and sorting (latest or most popular)
 - Logged-in user profile editing, including activity categories
-
-### 🔄 Planned
-
 - Public user profiles with posts and basic interaction history
 - Service reviews from both clients and providers
 - Real-time notifications
@@ -50,118 +58,113 @@ This project was developed as the final assignment for the Laboratory of Innovat
 
 <h2 id="technologies"> 🧪 Technologies</h2>
 
-This project was built using the following technologies and tools:
-
-- [Next.js](https://nextjs.org/) — React-based framework for building fast web applications
+- [Next.js 14](https://nextjs.org/) — App Router, Server Components, Route Handlers
 - [TypeScript](https://www.typescriptlang.org/) — Strongly typed language for scalable code
-- [CSS Modules](https://github.com/css-modules/css-modules) — Scoped and modular CSS styling
-- [IBGE API](https://servicodados.ibge.gov.br/api/docs/) — For location data (states and cities)
+- [Tailwind CSS v3](https://tailwindcss.com/) — Utility-first CSS with custom design tokens
+- [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/) — Form handling and validation
+- [TanStack Query v5](https://tanstack.com/query) — Server state management and caching
+- [Zustand v5](https://zustand-demo.pmnd.rs/) — Client state for multi-step registration
+- [Sonner](https://sonner.emilkowal.ski/) — Toast notifications
+- [Iconify](https://iconify.design/) — Icon library (`@iconify/react`)
+- [Docker](https://www.docker.com/) — Containerized development environment
+- [Vitest](https://vitest.dev/) + [Testing Library](https://testing-library.com/) — Unit and component testing
 
 <h2 id="structure"> 📁 Structure</h2>
 
-Overview of the main folders and files in the project:
-
-```txt
-📂 components/                      # Reusable UI components
- ┣ 📄 Feed.tsx                      # Main feed with publications
- ┣ 📄 Sidebar.tsx                   # Sidebar menu with filters
- ┗ 📂 ultils/                       # UI helpers (modals, selectors, options)
-   ┣ 📄 CategorySelector.tsx
-   ┣ 📄 ModalConfirm.tsx
-   ┗ 📄 Options.tsx
-
-📂 models/                          # TypeScript interfaces for data models
- ┣ 📄 User.ts
- ┣ 📄 Category.ts
- ┣ 📄 Publication.ts
- ┣ 📄 Comment.ts
- ┣ 📄 Like.ts
- ┣ 📄 Chat.ts
- ┣ 📄 State.ts
- ┗ 📄 City.ts
-
-📂 pages/                           # Application routes (Next.js routing)
- ┣ 📄 index.tsx                    # Home / Feed
- ┣ 📄 login.tsx
- ┣ 📄 register.tsx
- ┣ 📄 edit-perfil.tsx             # Profile edit page
- ┣ 📄 notifications.tsx
- ┣ 📄 chat.tsx
- ┣ 📂 profile/
- ┃ ┗ 📄 [id].tsx                  # Public profile page
- ┣ 📂 posts/
- ┃ ┗ 📄 [id].tsx                  # Post details page
- ┣ 📄 search.tsx
- ┣ 📄 _app.tsx                    # Root app wrapper
- ┗ 📄 _document.tsx               # Custom document structure
-
-📂 public/
- ┗ 📂 midia/                       # Static media assets
-   ┣ 📄 background.jpg
-   ┗ 📄 icon.png
-
-📂 services/                        # API service handlers (axios)
- ┣ 📄 authService.ts
- ┣ 📄 userService.ts
- ┣ 📄 publicationService.ts
- ┣ 📄 categoryService.ts
- ┗ 📄 ibgeService.ts
-
-📂 styles/                          # CSS Modules and global styles
- ┣ 📄 styles.css                   # Global styles
- ┣ 📂 ultils/
- ┃ ┣ 📄 categorySelector.module.css
- ┃ ┣ 📄 confirmModal.module.css
- ┃ ┣ 📄 options.module.css
- ┃ ┗ 📄 publications.module.css
- ┣ 📄 feed.module.css
- ┣ 📄 form.module.css
- ┣ 📄 home.module.css
- ┣ 📄 perfil.module.css
- ┣ 📄 profile.module.css
- ┣ 📄 chat.module.css
- ┗ 📄 search.module.css
-
-📂 utils/                           # Utility functions and axios instance
- ┣ 📄 api.ts                       # Axios base config
- ┗ 📄 auth.ts                      # Token storage and validation
-
-📄 .env.local                       # Environment variables (API URL)
-📄 package.json                     # Dependencies and scripts
-📄 tsconfig.json                    # TypeScript config
-📄 next.config.mjs                  # Next.js configuration
 ```
+src/
+├── app/                # Next.js App Router — pages, layouts, Route Handlers
+│   ├── (auth)/         # Auth routes group (login, register flow)
+│   ├── (protected)/    # Protected routes (feed) — guarded by middleware
+│   └── api/            # Route Handlers — proxy to Laravel with HttpOnly cookie support
+├── components/         # React components
+│   ├── auth/           # Auth forms, layouts, role selector
+│   ├── feed/           # Feed-specific components (FeedHeader, FilterSidebar, CreatePost)
+│   ├── home/           # Landing page sections (Hero, Features, CTA, Footer…)
+│   ├── layout/         # Shared layout components (BottomNav, UserPopup)
+│   ├── post/           # Reusable post components (PostCard)
+│   ├── ui/             # Reusable primitives (Button, Input, Select, PageLoader…)
+│   └── providers/      # Context providers (QueryProvider)
+├── hooks/              # Data fetching hooks (useStates, useCities, useCategories)
+├── middleware.ts        # Route protection — redirects unauthenticated users to /login
+├── services/           # API layer (api.ts, auth, location, category)
+├── stores/             # Zustand stores (user session, register multi-step draft)
+├── lib/                # Utilities and Zod schemas (cache, validations)
+├── types/              # TypeScript interfaces (ApiResponse, User, Category…)
+├── __tests__/          # Test suites (Vitest)
+└── constants/          # Static fallback data (locations, categories)
+```
+
+<h2 id="tests"> 🧪 Tests</h2>
+
+The project uses **Vitest** + **Testing Library** with `jsdom` environment. All external dependencies (API calls, stores, navigation) are mocked — **no running server or Docker required**.
+
+### Running tests
+
+```bash
+# Locally (recommended — faster, no Docker needed)
+npm test                   # run all tests once
+npm run test:watch         # watch mode
+
+# Inside Docker container
+docker compose exec app npm test
+docker compose exec app npm run test:watch
+```
+
+### Coverage
+
+| Suite | File | Tests |
+|---|---|---|
+| Validations | `auth-schema.test.ts` | loginSchema, registerSchema (email, password, role, confirmPassword) |
+| Validations | `register-schema.test.ts` | locationSchema, servicesSchema |
+| Services | `auth-service.test.ts` | login, register, logout — success, errors, field errors |
+| Services | `api.test.ts` | get, post — JSON, errors, non-JSON responses |
+| Lib | `cache.test.ts` | withCache — hit, miss, expiration, corrupted storage |
+| Hooks | `use-states.test.ts` | success, error, staleTime |
+| Hooks | `use-cities.test.ts` | disabled when stateId=null, enabled when provided |
+| Hooks | `use-categories.test.ts` | success, error, single fetch |
+| Components | `Button.test.tsx` | variants, loading spinner, disabled, onClick |
+| Components | `Input.test.tsx` | label, error message, ref forwarding, native props |
+| Components | `LoginForm.test.tsx` | render, validation, submit, toasts, URL ?message |
 
 <h2 id="getting-started">▶️ Getting Started</h2>
 
 ### Requirements
 
-- Node.js >= 16.x
-- npm >= 8.x or yarn >= 1.x
-- Backend API running (Laravel API)
+- [Docker](https://www.docker.com/) and Docker Compose
+- Backend API running (Laravel)
 
-### Installation
+### Environment variables
+
+Create a `.env.local` file at the project root:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/api
+```
+
+### Running with Docker
 
 ```bash
 # Clone the repository
 git clone https://github.com/issagomesdev/biko.git
-
 cd biko
 
-# Install dependencies
-npm install
-# or
-yarn install
+# First run (or after adding new packages)
+docker compose up --build
 
-# Create a `.env.local` file and add the following environment variable:
-NEXT_PUBLIC_API_URL=your_api_url_here
-# Make sure the backend API is running and accessible at the URL set in NEXT_PUBLIC_API_URL.
-
-# Run the development server
-npm run dev
-# ou
-yarn dev
+# Subsequent runs
+docker compose up
 ```
+
+### Running locally (without Docker)
+
+```bash
+npm install
+npm run dev
+```
+
+> After adding new npm packages in a Docker environment, run `docker compose down -v && docker compose up --build` to rebuild the container with updated dependencies.
+
 <h2 id="related-projects">🔗 Related Projects</h2>
 
 🧱 Backend (Laravel API) repository [here](https://github.com/issagomesdev/biko-api)

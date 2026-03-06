@@ -13,11 +13,12 @@ import { Select } from "@/src/components/ui/Select"
 import { Button } from "@/src/components/ui/Button"
 
 export function LocationForm() {
-  const router  = useRouter()
-  const role    = useSearchParams().get("role")
-  const draft   = useRegisterStore((s) => s.draft)
-  const setCity = useRegisterStore((s) => s.setCity)
-  const reset   = useRegisterStore((s) => s.reset)
+  const router        = useRouter()
+  const role          = useSearchParams().get("role")
+  const draft         = useRegisterStore((s) => s.draft)
+  const setCity       = useRegisterStore((s) => s.setCity)
+  const reset         = useRegisterStore((s) => s.reset)
+  const setEmailError = useRegisterStore((s) => s.setEmailError)
 
   const { control, handleSubmit, watch, formState: { errors, isSubmitting } } =
     useForm<LocationInput>({ resolver: zodResolver(locationSchema) })
@@ -38,7 +39,7 @@ export function LocationForm() {
     }
 
     try {
-      await authService.register({
+      const res = await authService.register({
         name:       draft.name,
         email:      draft.email,
         password:   draft.password,
@@ -46,9 +47,15 @@ export function LocationForm() {
         categories: [],
       })
       reset()
+      if (res.message) toast.success(res.message)
       router.push("/login")
     } catch (err: any) {
-      toast.error(err.message ?? "Erro ao criar conta")
+      const msg = err.message ?? "Erro ao criar conta"
+      toast.error(msg)
+      if (msg.toLowerCase().includes("e-mail") || msg.toLowerCase().includes("email")) {
+        setEmailError(msg)
+        router.push("/register")
+      }
     }
   }
 

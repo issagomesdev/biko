@@ -1,25 +1,35 @@
 "use client"
 
 import Link from "next/link"
+import { useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { loginSchema, type LoginInput } from "@/src/lib/validations/auth-schema"
 import { authService } from "@/src/services/auth-service"
+import { useUserStore } from "@/src/stores/user-store"
 import { Input } from "@/src/components/ui/Input"
 import { Button } from "@/src/components/ui/Button"
 
 export function LoginForm() {
-  const router = useRouter()
+  const setUser      = useUserStore((s) => s.setUser)
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const message = searchParams.get("message")
+    if (message) toast.success(decodeURIComponent(message))
+  }, [])
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } =
     useForm<LoginInput>({ resolver: zodResolver(loginSchema) })
 
   async function onSubmit(data: LoginInput) {
     try {
-      await authService.login(data)
-      router.push("/feed")
+      const res = await authService.login(data)
+      setUser(res.user)
+      if (res.message) toast.success(res.message)
+      window.location.href = "/feed"
     } catch (err: any) {
       toast.error(err.message ?? "Credenciais inválidas")
     }

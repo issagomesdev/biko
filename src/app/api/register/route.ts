@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 
-const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL
+const API_URL = process.env.API_BASE_URL ?? process.env.NEXT_PUBLIC_API_BASE_URL
 
 export async function POST(req: NextRequest) {
   const body = await req.json()
@@ -17,5 +17,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(data, { status: upstream.status })
   }
 
-  return NextResponse.json({ success: true })
+  return NextResponse.json({ success: true, message: data.message ?? null })
 }
