@@ -1,0 +1,18 @@
+services:
+  app:
+    build:
+      context: .
+      args:
+        NODE_ENV: development
+    container_name: biko_front
+    restart: unless-stopped
+    ports:
+      - "3005:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - WATCHPACK_POLLING=true
+      - NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/api
+      - API_BASE_URL=http://host.docker.internal:8000/api
