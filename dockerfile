@@ -7,5 +7,10 @@ RUN npm install
 
 COPY . .
 
+ARG NODE_ENV=production
+
+RUN if [ "$NODE_ENV" = "production" ]; then npm run build; fi
+
 EXPOSE 3000
-CMD ["npm", "run", "dev"]
+
+CMD if [ "$NODE_ENV" = "production" ]; then npm start; else npm run dev; fi
