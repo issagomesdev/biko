@@ -1,8 +1,8 @@
 import { z } from "zod"
 
 export const locationSchema = z.object({
-  state_id: z.number({ required_error: "Selecione seu estado" }),
-  city_id:  z.number({ required_error: "Selecione sua cidade" }),
+  state_id: z.number({ message: "Selecione seu estado" }),
+  city_id:  z.number({ message: "Selecione sua cidade" }),
 })
 
 export const servicesSchema = z.object({
