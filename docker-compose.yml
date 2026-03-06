@@ -1,6 +1,9 @@
 services:
   app:
-    build: .
+    build:
+      context: .
+      args:
+        NODE_ENV: ${NODE_ENV:-production}
     container_name: biko_front
     restart: unless-stopped
     ports:
