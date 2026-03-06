@@ -1,6 +1,7 @@
 import { SplitLayout } from "@/src/components/auth/SplitLayout";
 import { AuthPanel } from "@/src/components/auth/AuthPanel";
 import { LoginForm } from "@/src/components/auth/LoginForm";
+import { Suspense } from "react"
 import { MobileAuthHeader } from "@/src/components/auth/MobileAuthHeader";
 
 export default function LoginPage() {
@@ -18,7 +19,9 @@ export default function LoginPage() {
         title="Bem-vindo de volta"
         subtitle="Entre na sua conta para continuar"
       />
-      <LoginForm />
+      <Suspense fallback={<div>Carregando...</div>}>
+        <LoginForm />
+      </Suspense>
     </SplitLayout>
   );
 }
