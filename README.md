@@ -1,11 +1,11 @@
 # Biko — Social platform for service providers and seekers
 
 ![Next.js](https://img.shields.io/badge/Next.js-000?style=for-the-badge&logo=next.js) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![Status](https://img.shields.io/badge/status-in_development-yellow?style=for-the-badge)
+
 
 ![Preview do site](https://media.byissa.dev/biko/preview.png)
-
-![Status](https://img.shields.io/badge/status-in_development-yellow)
-
 <p align="center">
   <a href="#about">About</a> •
   <a href="#roadmap">Roadmap</a> •
@@ -136,10 +136,11 @@ docker compose exec app npm run test:watch
 
 ### Environment variables
 
-Create a `.env.local` file at the project root:
+Copy and configure environment variables `cp .env.example .env.local`
 
 ```env
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/api
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/api 
+...
 ```
 
 ### Running with Docker
