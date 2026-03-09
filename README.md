@@ -58,16 +58,16 @@ This project was developed as the final assignment for the Laboratory of Innovat
 
 <h2 id="technologies"> 🧪 Technologies</h2>
 
-- [Next.js 14](https://nextjs.org/) — App Router, Server Components, Route Handlers
-- [TypeScript](https://www.typescriptlang.org/) — Strongly typed language for scalable code
-- [Tailwind CSS v3](https://tailwindcss.com/) — Utility-first CSS with custom design tokens
-- [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/) — Form handling and validation
-- [TanStack Query v5](https://tanstack.com/query) — Server state management and caching
-- [Zustand v5](https://zustand-demo.pmnd.rs/) — Client state for multi-step registration
-- [Sonner](https://sonner.emilkowal.ski/) — Toast notifications
-- [Iconify](https://iconify.design/) — Icon library (`@iconify/react`)
-- [Docker](https://www.docker.com/) — Containerized development environment
-- [Vitest](https://vitest.dev/) + [Testing Library](https://testing-library.com/) — Unit and component testing
+- [Next.js 14](https://nextjs.org/) 
+- [TypeScript](https://www.typescriptlang.org/) 
+- [Tailwind CSS v3](https://tailwindcss.com/) 
+- [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/) 
+- [TanStack Query v5](https://tanstack.com/query) 
+- [Zustand v5](https://zustand-demo.pmnd.rs/) 
+- [Sonner](https://sonner.emilkowal.ski/) 
+- [Iconify](https://iconify.design/) 
+- [Docker](https://www.docker.com/) 
+- [Vitest](https://vitest.dev/) + [Testing Library](https://testing-library.com/) 
 
 <h2 id="structure"> 📁 Structure</h2>
 
