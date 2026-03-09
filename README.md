@@ -65,7 +65,6 @@ This project was developed as the final assignment for the Laboratory of Innovat
 - [TanStack Query v5](https://tanstack.com/query) 
 - [Zustand v5](https://zustand-demo.pmnd.rs/) 
 - [Sonner](https://sonner.emilkowal.ski/) 
-- [Iconify](https://iconify.design/) 
 - [Docker](https://www.docker.com/) 
 - [Vitest](https://vitest.dev/) + [Testing Library](https://testing-library.com/) 
 
