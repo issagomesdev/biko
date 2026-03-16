@@ -35,8 +35,8 @@ export function UserPopup({ onClose }: Props) {
     try {
       const res = await authService.logout()
       clearUser()
-      const msg = encodeURIComponent(res.message ?? "Desconectado")
-      window.location.href = `/login?message=${msg}`
+      sessionStorage.setItem("flash", res.message ?? "Desconectado")
+      window.location.href = "/login"
     } catch {
       toast.error("Erro ao sair da conta")
       setLoading(false)

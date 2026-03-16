@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import { useEffect } from "react"
-import { useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
@@ -13,12 +12,14 @@ import { Input } from "@/src/components/ui/Input"
 import { Button } from "@/src/components/ui/Button"
 
 export function LoginForm() {
-  const setUser      = useUserStore((s) => s.setUser)
-  const searchParams = useSearchParams()
+  const setUser = useUserStore((s) => s.setUser)
 
   useEffect(() => {
-    const message = searchParams.get("message")
-    if (message) toast.success(decodeURIComponent(message))
+    const flash = sessionStorage.getItem("flash")
+    if (flash) {
+      sessionStorage.removeItem("flash")
+      setTimeout(() => toast.success(flash), 100)
+    }
   }, [])
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } =
@@ -36,7 +37,7 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8 w-full max-w-[400px] max-md:px-6">
+    <form method="post" onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8 w-full max-w-[400px] max-md:px-6">
       <div className="flex flex-col gap-2 max-md:hidden">
         <h2 className="font-sora font-bold text-[28px] text-black">Bem-vindo de volta</h2>
         <p className="font-inter text-base text-[#666666]">Entre na sua conta para continuar</p>

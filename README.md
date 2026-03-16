@@ -41,13 +41,15 @@ This project was developed as the final assignment for the Laboratory of Innovat
 - 3-day localStorage cache for states, cities, and categories (avoids redundant API calls)
 - API error handling: field-level messages extracted from Laravel's `errors` object shown as toasts
 - Email conflict detection: redirects back to register form with the error displayed under the email field
-
+- Timeline feed with real API data, infinite scroll (IntersectionObserver), and optimistic like updates
+- Filter sidebar: post type (client/provider), categories, state/city cascade, date presets, and sort order
+- Mobile filter drawer with draft state (filters only applied on "Aplicar")
+- Search bar connected to feed filters with 400ms debounce
+- `is_liked` correctly resolved for authenticated users via Next.js proxy route (Bearer token injected from HttpOnly cookie)
+- PostCard displays author, category, city/state, relative date, tags (inline with `#`), mentions, and post categories
+- Post options menu (PostMenuPopup) with conditional items: edit/delete (author only), follow (non-followers only), block (non-blocked only), save and copy link
 
 ### 🔄 Planned
-- Timeline-style publication of user content
-- Likes and comments for interaction
-- Post classification by category and user type (client or provider)
-- Filtering of posts by category, user type, location, and sorting (latest or most popular)
 - Logged-in user profile editing, including activity categories
 - Public user profiles with posts and basic interaction history
 - Service reviews from both clients and providers
@@ -81,7 +83,7 @@ src/
 │   ├── feed/           # Feed-specific components (FeedHeader, FilterSidebar, CreatePost)
 │   ├── home/           # Landing page sections (Hero, Features, CTA, Footer…)
 │   ├── layout/         # Shared layout components (BottomNav, UserPopup)
-│   ├── post/           # Reusable post components (PostCard)
+│   ├── post/           # Reusable post components (PostCard, PostMenuPopup)
 │   ├── ui/             # Reusable primitives (Button, Input, Select, PageLoader…)
 │   └── providers/      # Context providers (QueryProvider)
 ├── hooks/              # Data fetching hooks (useStates, useCities, useCategories)
@@ -117,6 +119,7 @@ docker compose exec app npm run test:watch
 | Validations | `auth-schema.test.ts` | loginSchema, registerSchema (email, password, role, confirmPassword) |
 | Validations | `register-schema.test.ts` | locationSchema, servicesSchema |
 | Services | `auth-service.test.ts` | login, register, logout — success, errors, field errors |
+| Services | `publication-service.test.ts` | list — query params, filters, pagination |
 | Services | `api.test.ts` | get, post — JSON, errors, non-JSON responses |
 | Lib | `cache.test.ts` | withCache — hit, miss, expiration, corrupted storage |
 | Hooks | `use-states.test.ts` | success, error, staleTime |
@@ -124,7 +127,7 @@ docker compose exec app npm run test:watch
 | Hooks | `use-categories.test.ts` | success, error, single fetch |
 | Components | `Button.test.tsx` | variants, loading spinner, disabled, onClick |
 | Components | `Input.test.tsx` | label, error message, ref forwarding, native props |
-| Components | `LoginForm.test.tsx` | render, validation, submit, toasts, URL ?message |
+| Components | `LoginForm.test.tsx` | render, validation, submit, toasts, sessionStorage flash |
 
 <h2 id="getting-started">▶️ Getting Started</h2>
 
@@ -144,16 +147,22 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/api
 
 ### Running with Docker
 
+The project uses `docker-compose.override.yml` to separate dev and production concerns:
+
+- **`docker-compose.yml`** — production config (code baked into the image)
+- **`docker-compose.override.yml`** — dev overrides (source volume + hot reload), applied automatically
+
 ```bash
 # Clone the repository
 git clone https://github.com/issagomesdev/biko.git
 cd biko
 
-# First run (or after adding new packages)
-docker compose up --build
+# Dev — hot reload via volume mount (override applied automatically)
+docker compose up --build   # first run or after adding new packages
+docker compose up           # subsequent runs
 
-# Subsequent runs
-docker compose up
+# Production — code baked into image, no volumes
+docker compose -f docker-compose.yml up --build
 ```
 
 ### Running locally (without Docker)

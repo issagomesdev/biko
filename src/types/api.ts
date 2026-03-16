@@ -14,6 +14,7 @@ export interface City {
   id:       number
   name:     string
   state_id: number
+  state?:   State
 }
 
 export interface Category {
@@ -41,4 +42,19 @@ export interface LoginResponse {
 export interface RegisterResponse {
   success: true
   message: string | null
+}
+
+export interface PaginatedMeta {
+  current_page: number
+  last_page:    number
+  per_page:     number
+  total:        number
+  from:         number | null
+  to:           number | null
+}
+
+export interface PaginatedData<T> {
+  data:  T[]
+  links: { first: string; last: string; prev: string | null; next: string | null }
+  meta:  PaginatedMeta
 }
