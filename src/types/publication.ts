@@ -27,6 +27,25 @@ export interface PublicationMedia {
 }
 
 
+export interface CommentAuthor {
+  id:       number
+  name:     string
+  username: string
+  avatar:   { url: string; thumb_url: string } | null
+}
+
+export interface Comment {
+  id:          number
+  comment:     string
+  parent_id:   number | null
+  author:      CommentAuthor
+  media:       PublicationMedia[]
+  replies:     Comment[]
+  likes_count: number
+  is_liked:    boolean
+  created_at:  string
+}
+
 export interface Publication {
   id:             number
   text:           string
@@ -40,6 +59,7 @@ export interface Publication {
   is_liked:       boolean
   likes_count:    number
   comments_count: number
+  comments?:      Comment[]
   created_at:     string
   updated_at:     string
 }

@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter }    from "next/navigation"
 import { useUserStore } from "@/src/stores/user-store"
 
 function getInitials(name: string) {
@@ -7,6 +8,7 @@ function getInitials(name: string) {
 }
 
 export function CreatePost() {
+  const router   = useRouter()
   const user     = useUserStore((s) => s.user)
   const initials = user ? getInitials(user.name) : "?"
 
@@ -16,7 +18,10 @@ export function CreatePost() {
         <div className="w-11 h-11 rounded-full bg-primary flex items-center justify-center shrink-0">
           <span className="font-inter font-semibold text-base text-black">{initials}</span>
         </div>
-        <button className="flex-1 h-[52px] bg-[#F5F5F5] rounded-[26px] px-5 flex items-center text-left">
+        <button
+          onClick={() => router.push("/publications/create")}
+          className="flex-1 h-[52px] bg-[#F5F5F5] rounded-[26px] px-5 flex items-center text-left hover:bg-[#EEEEEE] transition-colors"
+        >
           <span className="font-inter text-sm text-[#999999]">Compartilhe algo...</span>
         </button>
       </div>

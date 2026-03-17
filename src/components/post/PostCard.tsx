@@ -1,12 +1,15 @@
 "use client"
 
 import { useState }          from "react"
+import Link                  from "next/link"
+import { useRouter }         from "next/navigation"
 import { Icon }              from "@iconify/react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import type { Publication }  from "@/src/types/publication"
 import type { InfiniteData } from "@tanstack/react-query"
 import type { PaginatedData } from "@/src/types/api"
 import { PostMenuPopup }     from "@/src/components/post/PostMenuPopup"
+import { PostText }          from "@/src/components/post/PostText"
 
 interface PostCardProps {
   post:         Publication
@@ -43,6 +46,7 @@ function formatDate(dateStr: string): string {
 
 export function PostCard({ post, queryKey }: PostCardProps) {
   const queryClient = useQueryClient()
+  const router      = useRouter()
   const [liked,    setLiked]    = useState(post.is_liked)
   const [showMenu, setShowMenu] = useState(false)
 
@@ -83,9 +87,11 @@ export function PostCard({ post, queryKey }: PostCardProps) {
     },
   })
 
-  const primaryCategory = post.author.categories?.[0]?.name ?? post.categories?.[0]?.name ?? ""
-  const city            = post.city ?? post.author.city ?? null
-  const location        = city ? `${city.name}${city.state ? `, ${city.state.uf}` : ""}` : ""
+  const primaryCategory = post.author.categories?.[0]?.name ?? ""
+  const authorCity      = post.author.city ?? null
+  const authorLocation  = authorCity ? `${authorCity.name}${authorCity.state ? `, ${authorCity.state.uf}` : ""}` : ""
+  const pubCity         = post.city ?? null
+  const pubLocation     = pubCity ? `${pubCity.name}${pubCity.state ? `, ${pubCity.state.uf}` : ""}` : ""
   const initials        = getInitials(post.author.name)
   const firstImage      = post.media.find((m) => m.type === "image")
 
@@ -105,23 +111,23 @@ export function PostCard({ post, queryKey }: PostCardProps) {
             <span className="font-inter font-semibold text-sm md:text-[15px] text-black truncate">
               {post.author.name}
             </span>
+            <span className="font-inter text-[11px] md:text-xs text-[#999999] truncate">@{post.author.username}</span>
             <span className={`font-inter text-[11px] font-medium px-2 py-0.5 rounded-[10px] shrink-0 ${post.type === 1 ? "bg-primary text-black" : "bg-black text-white"}`}>
               {post.type === 1 ? "Prestador" : "Cliente"}
             </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             {primaryCategory && (
               <span className="font-inter text-xs md:text-[13px] font-medium text-primary">{primaryCategory}</span>
             )}
-            {primaryCategory && location && (
+            {primaryCategory && authorLocation && (
               <span className="font-inter text-xs md:text-[13px] text-[#999999]">•</span>
             )}
-            {location && (
-              <span className="font-inter text-xs md:text-[13px] text-[#999999] truncate">{location}</span>
+            {authorLocation && (
+              <span className="font-inter text-xs md:text-[13px] text-[#999999] truncate">{authorLocation}</span>
             )}
           </div>
         </div>
-
 
         <div className="relative flex flex-col items-end gap-1 shrink-0">
           <button onClick={() => setShowMenu((v) => !v)} className="text-[#999999]">
@@ -129,7 +135,7 @@ export function PostCard({ post, queryKey }: PostCardProps) {
             <Icon icon="lucide:ellipsis" width={20} height={20} className="hidden md:block" />
           </button>
           <span className="font-inter text-[10px] md:text-[11px] text-[#999999]">{formatDate(post.created_at)}</span>
-          {showMenu && <PostMenuPopup post={post} onClose={() => setShowMenu(false)} />}
+          {showMenu && <PostMenuPopup post={post} queryKey={queryKey} onClose={() => setShowMenu(false)} />}
         </div>
       </div>
 
@@ -137,28 +143,36 @@ export function PostCard({ post, queryKey }: PostCardProps) {
       {post.mentions.length > 0 && (
         <p className="font-inter text-[12px] md:text-[13px] text-[#999999]">
           {post.mentions.map((m) => (
-            <span key={m.id} className="text-primary font-medium">@{m.username}{" "}</span>
+            <span key={m.id} className="text-primary font-medium cursor-pointer">@{m.username}{" "}</span>
           ))}
           <span>{post.mentions.length === 1 ? "foi mencionado" : "foram mencionados"} neste post</span>
         </p>
       )}
 
       {/* Content */}
-      <p className="font-inter text-[13px] md:text-sm text-[#333333] leading-relaxed">
-        {post.text}
-        {post.tags.map((tag) => (
-          <span key={tag} className="font-inter text-[13px] md:text-sm text-primary ml-1">#{tag}</span>
-        ))}
-      </p>
+      <div>
+        <PostText
+          text={post.text}
+          mentions={post.mentions}
+          tags={post.tags}
+          className="font-inter text-[13px] md:text-sm text-[#333333] leading-relaxed hover:text-[#111111] transition-colors"
+        />
+      </div>
 
-      {/* Categories */}
-      {post.categories.length > 0 && (
-        <div className="flex flex-wrap gap-1.5">
+      {/* Categories + publication location */}
+      {(post.categories.length > 0 || pubLocation) && (
+        <div className="flex flex-wrap items-center gap-1.5">
           {post.categories.map((cat) => (
-            <span key={cat.id} className="font-inter text-[11px] md:text-xs font-medium px-2.5 py-0.5 rounded-full bg-[#F5F5F5] text-[#666666]">
+            <span key={cat.id} className="font-inter text-[11px] md:text-xs font-medium px-2.5 py-0.5 rounded-full bg-[#F5F5F5] text-[#666666] cursor-pointer">
               {cat.name}
             </span>
           ))}
+          {pubLocation && (
+            <div className="flex items-center gap-1 text-[#999999]">
+              <Icon icon="lucide:map-pin" width={12} height={12} />
+              <span className="font-inter text-[11px] md:text-xs">{pubLocation}</span>
+            </div>
+          )}
         </div>
       )}
 
@@ -183,7 +197,7 @@ export function PostCard({ post, queryKey }: PostCardProps) {
           <Icon icon={liked ? "ph:heart-fill" : "lucide:heart"} width={20} height={20} />
           <span className="font-inter text-[13px]">{formatCount(post.likes_count)}</span>
         </button>
-        <button className="flex items-center gap-1.5 text-[#666666]">
+        <button onClick={() => router.push(`/publications/${post.id}`)} className="flex items-center gap-1.5 text-[#666666]">
           <Icon icon="lucide:message-circle" width={20} height={20} />
           <span className="font-inter text-[13px]">{formatCount(post.comments_count)}</span>
         </button>

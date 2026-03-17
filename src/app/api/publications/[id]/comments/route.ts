@@ -2,32 +2,19 @@ import { NextRequest, NextResponse } from "next/server"
 
 const API_URL = process.env.API_BASE_URL ?? process.env.NEXT_PUBLIC_API_BASE_URL
 
-export async function GET(req: NextRequest) {
-  const token = req.cookies.get("token")?.value
-
-  const qs = req.nextUrl.searchParams.toString()
-  const url = `${API_URL}/publications${qs ? `?${qs}` : ""}`
-
-  const upstream = await fetch(url, {
-    headers: {
-      "Accept": "application/json",
-      ...(token ? { "Authorization": `Bearer ${token}` } : {}),
-    },
-  })
-
-  const data = await upstream.json().catch(() => ({}))
-  return NextResponse.json(data, { status: upstream.status })
-}
-
-export async function POST(req: NextRequest) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const token = req.cookies.get("token")?.value
   if (!token) {
     return NextResponse.json({ success: false, message: "Não autenticado" }, { status: 401 })
   }
 
+  const { id }   = await params
   const formData = await req.formData().catch(() => new FormData())
 
-  const upstream = await fetch(`${API_URL}/publications`, {
+  const upstream = await fetch(`${API_URL}/publications/comment/${id}`, {
     method:  "POST",
     headers: {
       "Accept":        "application/json",

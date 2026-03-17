@@ -46,8 +46,14 @@ This project was developed as the final assignment for the Laboratory of Innovat
 - Mobile filter drawer with draft state (filters only applied on "Aplicar")
 - Search bar connected to feed filters with 400ms debounce
 - `is_liked` correctly resolved for authenticated users via Next.js proxy route (Bearer token injected from HttpOnly cookie)
-- PostCard displays author, category, city/state, relative date, tags (inline with `#`), mentions, and post categories
-- Post options menu (PostMenuPopup) with conditional items: edit/delete (author only), follow (non-followers only), block (non-blocked only), save and copy link
+- PostCard displays author name, `@username`, type badge (Prestador/Cliente), primary category, city/state (author row), relative date below options icon, post text with inline tags and highlighted mentions, publication categories and location
+- Post options menu (PostMenuPopup) with conditional items: edit/delete (author only), follow/unfollow (non-blocked non-author only), block/unblock (non-author only), copy link, view publication
+- Publication create/edit form (`PublicationFormShell`) with toast-based validation — shows missing required fields on submit instead of disabling the button
+- Existing media thumbnails rendered inline with new uploads in the same row (`MediaGrid`)
+- City/state selection is optional when creating or editing publications
+- Comment sorting in publication detail: most recent, oldest, or popular (by likes + replies)
+- Author categories and city/state included in publication list and detail API responses
+- Edit publication cache update — feed and detail stay in sync after saving without requiring a page refresh
 
 ### 🔄 Planned
 - Logged-in user profile editing, including activity categories
@@ -80,13 +86,14 @@ src/
 │   └── api/            # Route Handlers — proxy to Laravel with HttpOnly cookie support
 ├── components/         # React components
 │   ├── auth/           # Auth forms, layouts, role selector
-│   ├── feed/           # Feed-specific components (FeedHeader, FilterSidebar, CreatePost)
+│   ├── feed/           # Feed-specific components (FeedHeader, FilterSidebar, FilterDrawer, CreatePost)
 │   ├── home/           # Landing page sections (Hero, Features, CTA, Footer…)
 │   ├── layout/         # Shared layout components (BottomNav, UserPopup)
-│   ├── post/           # Reusable post components (PostCard, PostMenuPopup)
-│   ├── ui/             # Reusable primitives (Button, Input, Select, PageLoader…)
+│   ├── post/           # Reusable post components (PostCard, PostMenuPopup, PostText)
+│   ├── publication/    # Publication form shell and sub-components (MediaGrid, CategorySelectPopup)
+│   ├── ui/             # Reusable primitives (Button, Input, Select, ConfirmModal, PageLoader…)
 │   └── providers/      # Context providers (QueryProvider)
-├── hooks/              # Data fetching hooks (useStates, useCities, useCategories)
+├── hooks/              # Data fetching and form hooks (useStates, useCities, useCategories, usePublicationForm)
 ├── middleware.ts        # Route protection — redirects unauthenticated users to /login
 ├── services/           # API layer (api.ts, auth, location, category)
 ├── stores/             # Zustand stores (user session, register multi-step draft)
@@ -125,9 +132,15 @@ docker compose exec app npm run test:watch
 | Hooks | `use-states.test.ts` | success, error, staleTime |
 | Hooks | `use-cities.test.ts` | disabled when stateId=null, enabled when provided |
 | Hooks | `use-categories.test.ts` | success, error, single fetch |
+| Hooks | `usePublicationForm.test.ts` | canSubmit, buildFormData (text trim, city_id optional, categories, tags, mentions), handleStateChange, initial values |
 | Components | `Button.test.tsx` | variants, loading spinner, disabled, onClick |
 | Components | `Input.test.tsx` | label, error message, ref forwarding, native props |
 | Components | `LoginForm.test.tsx` | render, validation, submit, toasts, sessionStorage flash |
+| Components | `PostText.test.tsx` | plain text, mention highlight, case-insensitive match, dotted username, tags, no tags |
+| Components | `PostCard.test.tsx` | author info (name, username, badge, category, location), post body (text, categories, location, mentions), like toggle, comment button navigation, options menu |
+| Components | `PostMenuPopup.test.tsx` | author items (edit/delete), non-author items (follow/unfollow, block/unblock), copy link, hide follow when blocked, hideView prop, ConfirmModal delete flow |
+| Components | `FilterDrawer.test.tsx` | open/closed state, type buttons, categories, state/city selects, orderBy, date, apply/clear actions |
+| Utils | `commentSort.test.ts` | recent (newest first), oldest (oldest first), popular (likes+replies score), no array mutation, empty/single, undefined replies |
 
 <h2 id="getting-started">▶️ Getting Started</h2>
 
