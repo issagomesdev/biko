@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter }               from "next/navigation"
-import { useMutation }             from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast }                   from "sonner"
 
 import { useUserStore }            from "@/src/stores/user-store"
@@ -16,12 +16,17 @@ export default function CreatePublicationPage() {
   const { data: categoriesRes } = useCategories()
   const categories: Category[]  = (categoriesRes as any)?.data ?? []
 
+  const queryClient = useQueryClient()
   const form = usePublicationForm()
 
   const { mutate: publish, isPending } = useMutation({
     mutationFn: () => form.submit(),
-    onSuccess: () => { toast.success("Publicação criada!"); router.push("/feed") },
-    onError:   (err: Error) => toast.error(err.message),
+    onSuccess: () => {
+      toast.success("Publicação criada!")
+      queryClient.invalidateQueries({ queryKey: ["feed"] })
+      router.push("/feed")
+    },
+    onError: (err: Error) => toast.error(err.message),
   })
 
   return (
